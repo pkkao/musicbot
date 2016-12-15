@@ -311,13 +311,13 @@ class Economy:
             await ctx.invoke(self._server_leaderboard)
 
     @leaderboard.command(name="server", pass_context=True)
-    async def _server_leaderboard(self, ctx, top : int=10):
+    async def _server_leaderboard(self, ctx, top : int=30):
         """Prints out the server's leaderboard
 
         Defaults to top 10""" #Originally coded by Airenkun - edited by irdumb
         server = ctx.message.server
         if top < 1:
-            top = 10
+            top = 30
         bank_sorted = sorted(self.bank.get_server_accounts(server),
          key=lambda x: x.balance, reverse=True)
         if len(bank_sorted) < top:
