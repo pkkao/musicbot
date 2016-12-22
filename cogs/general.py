@@ -110,8 +110,6 @@ class General:
     @commands.command(name="8", aliases=["8ball"])
     async def _8ball(self, *, question : str):
         """Ask 8 ball a question
-
-        Question must end with a question mark.
         """
         await self.bot.say("`" + randchoice(self.ball) + "`")
 
@@ -138,7 +136,7 @@ class General:
     async def hug(self, user : discord.Member, intensity : int=1):
         """Because everyone likes hugs
 
-        Up to 10 intensity levels."""
+        Up to 15 intensity levels."""
         name = " *" + user.name + "*"
         if intensity <= 0:
             msg = "(っ˘̩╭╮˘̩)っ" + name
@@ -150,10 +148,8 @@ class General:
             msg = "(つ≧▽≦)つ" + name
         elif intensity <= 12:
             msg = "(づ￣ ³￣)づ" + name + " ⊂(´・ω・｀⊂)"
-        elif intensity <= 15:
+        elif intensity >= 15:
             msg = "(づ♡ 3♡)づ" + name + "⊂('^▽^´⊂)"
-        elif intensity >= 18:
-            msg = "(っ⇀⑃↼)っ" + user
         await self.bot.say(msg)
 
     @commands.command(pass_context=True, no_pm=True)
