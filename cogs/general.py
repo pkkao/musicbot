@@ -155,9 +155,8 @@ class General:
     @commands.command(no_pm=True, hidden=True)
     async def sue(self, user : discord.Member):
         """Take a user to court."""
-        name = "**" + user.name + "**"
-        msg = name + " has been sued."
-        await self.bot.say(msg)
+        author = ctx.message.author
+        await self.bot.say("{} has been sued.".format(author.mention))
 
     @commands.command(pass_context=True, no_pm=True)
     async def userinfo(self, ctx, user: discord.Member=None):
