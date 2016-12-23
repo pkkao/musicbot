@@ -113,6 +113,18 @@ class General:
         """
         await self.bot.say("`" + randchoice(self.ball) + "`")
 
+    @commands.command(name="fahrenheit")
+    async def fahrenheit(self, *, temp : int):
+        """Converts Fahrenheit temperature to Celsius
+        """
+        await self.bot.say(temp + "degrees Fahrenheit is" + (temp - 32) * 5 / 9) + "degrees Celsius.")
+
+    @commands.command(name="celsius")
+    async def celsius(self, *, temp : int):
+        """Converts Celsius temperature to Fahrenheit
+        """
+        await self.bot.say(temp + "degrees Celsius is" + ((temp * 9/5) + 32) + "degrees Celsius.")
+
     @commands.command(aliases=["sw"], pass_context=True)
     async def stopwatch(self, ctx):
         """Starts/stops stopwatch"""
