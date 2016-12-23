@@ -117,13 +117,15 @@ class General:
     async def fahrenheit(self, *, temp : int):
         """Converts Fahrenheit temperature to Celsius
         """
-        await self.bot.say(temp + "degrees Fahrenheit is" + (temp - 32) * 5 / 9) + "degrees Celsius.")
+        newtemp = (temp-32)*5.0/9.0
+        await self.bot.say(temp + "degrees Fahrenheit is" + newtemp + "degrees Celsius.")
 
     @commands.command(name="celsius")
     async def celsius(self, *, temp : int):
         """Converts Celsius temperature to Fahrenheit
         """
-        await self.bot.say(temp + "degrees Celsius is" + ((temp * 9/5) + 32) + "degrees Celsius.")
+        newtemp = (temp * 9.0/5.0) + 32
+        await self.bot.say(temp + "degrees Celsius is" + newtemp + "degrees Celsius.")
 
     @commands.command(aliases=["sw"], pass_context=True)
     async def stopwatch(self, ctx):
