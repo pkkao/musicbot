@@ -118,7 +118,7 @@ class General:
         """Converts Fahrenheit temperature to Celsius
         """
         newtemp = (temp-32)*5.0/9.0
-        await self.bot.say(str(temp) + " degrees Fahrenheit is " + str(newtemp) + " degrees Celsius.")
+        await self.bot.say(str(temp) + " degrees Fahrenheit is " + str(newtemp)[:4] + " degrees Celsius.")
 
     @commands.command(name="celsius")
     async def celsius(self, *, temp : int):
