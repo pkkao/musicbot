@@ -125,7 +125,7 @@ class General:
         """Converts Celsius temperature to Fahrenheit
         """
         newtemp = (temp * 9.0/5.0) + 32
-        await self.bot.say(str(temp) + " degrees Celsius is " + str(newtemp) + " degrees Celsius.")
+        await self.bot.say(str(temp) + " degrees Celsius is " + str(newtemp) + " degrees Fahrenheit.")
 
     @commands.command(aliases=["sw"], pass_context=True)
     async def stopwatch(self, ctx):
