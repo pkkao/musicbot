@@ -180,7 +180,7 @@ class General:
             msg = "(づ♡ 3♡)づ" + name + "⊂('^▽^´⊂)"
         await self.bot.say(msg)
 
-    @commands.command(no_pm=True, hidden=True)
+    @commands.command(pass_context=True, no_pm=True, hidden=True)
     async def sue(self, ctx, user : discord.Member):
         """Take a user to court."""
         if user.id == self.bot.user.id:
