@@ -116,7 +116,7 @@ class General:
     async def _8ball(self, *, question : str):
         """Ask 8 ball a question
         """
-        await self.bot.say("`" + randchoice(self.ball) + "`")
+        await self.bot.say(randchoice(self.ball))
 
     @commands.command()
     async def whodunit(self):
@@ -183,7 +183,10 @@ class General:
     @commands.command(no_pm=True, hidden=True)
     async def sue(self, user : discord.Member):
         """Take a user to court."""
-        await self.bot.say("{} has been sued.".format(user.mention))
+        if user.id == self.bot.user.id:
+                user = ctx.message.author
+                msg = "Nice try. You think this is funny? How about *this* instead:\n\n"
+        await self.bot.say(msg + "{} has been sued.".format(user.mention))
 
     @commands.command(pass_context=True, no_pm=True)
     async def userinfo(self, ctx, user: discord.Member=None):
