@@ -353,7 +353,7 @@ class General:
     async def endpoll(self, message):       
         if self.getPollByChannel(message):
             p = self.getPollByChannel(message)
-            if p.author == message.author.id #or isMemberAdmin(message)
+            if p.author == message.author.id: #or isMemberAdmin(message)
                 await self.getPollByChannel(message).endPoll()
             else:
                 await self.bot.say("Only the author can stop the poll.")
