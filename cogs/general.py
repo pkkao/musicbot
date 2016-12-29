@@ -16,16 +16,21 @@ class General:
     def __init__(self, bot):
         self.bot = bot
         self.stopwatches = {}
-        self.ball = ["As I see it, yes", "It is certain", "It is decidedly so", "Most likely", "Outlook good",
-                     "Signs point to yes", "Without a doubt", "Yes", "Yes – definitely", "You may rely on it",
-                     "Ask again later", "Better not tell you now", "Cannot predict now",
-                     "Don't count on it", "My reply is no", "My sources say no", "Outlook not so good", "Very doubtful"]
+        self.ball = ["Hell yes","Eh, sure","Sure why not","Yes!!!","Yes","Yeah","Probably",
+                     "I'm just a lowly bot, I wouldn't know","Hey why don't you ask thisisnotabot","Beats me",
+                     "Nah","No","No!!!","Are you serious? No way","Um...how about no","Eh probably not","Nooooooo"]
+        self.userlist = ["peyrin","kaos"]
         self.poll_sessions = []
 
     @commands.command(hidden=True)
     async def ping(self):
         """Pong."""
         await self.bot.say("Pong.")
+
+    @commands.command(hidden=True)
+    async def pong(self):
+        """Ping."""
+        await self.bot.say("Ping.")
 
     @commands.command()
     async def choose(self, *choices):
@@ -113,12 +118,21 @@ class General:
         """
         await self.bot.say("`" + randchoice(self.ball) + "`")
 
+    @commands.command()
+    async def whodunit(self):
+        """Who did it??????????????????
+        """
+        await self.bot.say("It was @" + randchoice(self.userlist) + "!!!")
+
     @commands.command(name="fahrenheit")
     async def fahrenheit(self, *, temp : int):
         """Converts Fahrenheit temperature to Celsius
         """
         newtemp = (temp-32)*5.0/9.0
-        await self.bot.say(str(temp) + " degrees Fahrenheit is " + str(newtemp)[:4] + " degrees Celsius.")
+        if newtemp < 0:
+            await self.bot.say(str(temp) + " degrees Fahrenheit is " + str(newtemp)[:5] + " degrees Celsius.")
+        else:
+            await self.bot.say(str(temp) + " degrees Fahrenheit is " + str(newtemp)[:4] + " degrees Celsius.")            
 
     @commands.command(name="celsius")
     async def celsius(self, *, temp : int):
@@ -276,38 +290,39 @@ class General:
         Definition number must be between 1 and 10"""
         # definition_number is just there to show up in the help
         # all this mess is to avoid forcing double quotes on the user
-        search_terms = search_terms.split(" ")
-        try:
-            if len(search_terms) > 1:
-                pos = int(search_terms[-1]) - 1
-                search_terms = search_terms[:-1]
-            else:
-                pos = 0
-            if pos not in range(0, 11): # API only provides the
-                pos = 0                 # top 10 definitions
-        except ValueError:
-            pos = 0
-        search_terms = "+".join(search_terms)
-        url = "http://api.urbandictionary.com/v0/define?term=" + search_terms
-        try:
-            async with aiohttp.get(url) as r:
-                result = await r.json()
-            if result["list"]:
-                definition = result['list'][pos]['definition']
-                example = result['list'][pos]['example']
-                defs = len(result['list'])
-                msg = ("**Definition #{} out of {}:\n**{}\n\n"
-                       "**Example:\n**{}".format(pos+1, defs, definition,
-                                                 example))
-                msg = pagify(msg, ["\n"])
-                for page in msg:
-                    await self.bot.say(page)
-            else:
-                await self.bot.say("Your search terms gave no results.")
-        except IndexError:
-            await self.bot.say("There is no definition #{}".format(pos+1))
-        except:
-            await self.bot.say("Error.")
+        #search_terms = search_terms.split(" ")
+        #try:
+            #if len(search_terms) > 1:
+                #pos = int(search_terms[-1]) - 1
+                #search_terms = search_terms[:-1]
+            #else:
+                #pos = 0
+            #if pos not in range(0, 11): # API only provides the
+                #pos = 0                 # top 10 definitions
+        #except ValueError:
+            #pos = 0
+        #search_terms = "+".join(search_terms)
+        #url = "http://api.urbandictionary.com/v0/define?term=" + search_terms
+        #try:
+            #async with aiohttp.get(url) as r:
+                #result = await r.json()
+            #if result["list"]:
+                #definition = result['list'][pos]['definition']
+                #example = result['list'][pos]['example']
+                #defs = len(result['list'])
+                #msg = ("**Definition #{} out of {}:\n**{}\n\n"
+                       #"**Example:\n**{}".format(pos+1, defs, definition,
+                                                 #example))
+                #msg = pagify(msg, ["\n"])
+                #for page in msg:
+                    #await self.bot.say(page)
+            #else:
+                #await self.bot.say("Your search terms gave no results.")
+        #except IndexError:
+            #await self.bot.say("There is no definition #{}".format(pos+1))
+        #except:
+            #await self.bot.say("Error.")
+        await self.bot.say("How about...let's not.")
 
     @commands.command(pass_context=True, no_pm=True)
     async def poll(self, ctx, *text):
@@ -338,7 +353,7 @@ class General:
     async def endpoll(self, message):
         if self.getPollByChannel(message):
             p = self.getPollByChannel(message)
-            if p.author == message.author.id: # or isMemberAdmin(message)
+            if p.author == message.author.id: or isMemberAdmin(message)
                 await self.getPollByChannel(message).endPoll()
             else:
                 await self.bot.say("Only admins and the author can stop the poll.")
