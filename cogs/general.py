@@ -350,13 +350,13 @@ class General:
         else:
             await self.bot.say("A poll is already ongoing in this channel.")
 
-    async def endpoll(self, message):
+    async def endpoll(self, message):       
         if self.getPollByChannel(message):
             p = self.getPollByChannel(message)
-            if p.author == message.author.id: or isMemberAdmin(message)
+            if p.author == message.author.id #or isMemberAdmin(message)
                 await self.getPollByChannel(message).endPoll()
             else:
-                await self.bot.say("Only admins and the author can stop the poll.")
+                await self.bot.say("Only the author can stop the poll.")
         else:
             await self.bot.say("There's no poll ongoing in this channel.")
 
