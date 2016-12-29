@@ -19,7 +19,7 @@ class General:
         self.ball = ["Hell yes","Eh, sure","Sure why not","Yes!!!","Yes","Yeah","Probably",
                      "I'm just a lowly bot, I wouldn't know","Hey why don't you ask thisisnotabot","Beats me",
                      "Nah","No","No!!!","Are you serious? No way","Um...how about no","Eh probably not","Nooooooo"]
-        self.userlist = ["peyrin","kaos"]
+        self.userlist = ["tinaun","peyrin","painty-can","beans","bias","BlueRibbonCommittee","BMC","boxelder","Dark Homer","DoctorMcGann","Godot","hamm","hutz","inmate","insomnia","justin","kaos","kupomog","LTTR","Matty","moose","OldSchoolerMicRuler","Nicky","Nilbog","paddlin","parklife","RobynS","Ryan","samuelle_emanuelle","Shaunbadia","sir hops","SmilingPolitely","The Great Remin","scully apologist","tormented","Torrens","Tromboon","Telso"]
         self.poll_sessions = []
 
     @commands.command(hidden=True)
@@ -122,7 +122,7 @@ class General:
     async def whodunit(self):
         """Who did it??????????????????
         """
-        await self.bot.say("It was @" + randchoice(self.userlist) + "!!!")
+        await self.bot.say("It was " + randchoice(self.userlist) + "!!!!")
 
     @commands.command(name="fahrenheit")
     async def fahrenheit(self, *, temp : int):
@@ -181,12 +181,13 @@ class General:
         await self.bot.say(msg)
 
     @commands.command(no_pm=True, hidden=True)
-    async def sue(self, user : discord.Member):
+    async def sue(self, ctx, user : discord.Member):
         """Take a user to court."""
         if user.id == self.bot.user.id:
                 user = ctx.message.author
-                msg = "Nice try. You think this is funny? How about *this* instead:\n\n"
-        await self.bot.say(msg + "{} has been sued.".format(user.mention))
+                await self.bot.say("Nice try. You think this is funny? How about let's sue {}, huh?".format(user.mention))
+        else:
+            await self.bot.say("{} has been sued.".format(user.mention))
 
     @commands.command(pass_context=True, no_pm=True)
     async def userinfo(self, ctx, user: discord.Member=None):
