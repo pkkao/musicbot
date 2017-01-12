@@ -1287,9 +1287,7 @@ class Audio:
             await self.bot.say("I'm already downloading a file!")
             return
 
-        URLMatch = re.compile('@^(https?|ftp)://[^\s/$.?#].[^\s]*$@iS', re.IGNORECASE)
-
-        if URLMatch.match(url):
+        if "." in url:
             if not self._valid_playable_url(url):
                 await self.bot.say("That's not a valid URL.")
                 return
@@ -1301,6 +1299,7 @@ class Audio:
             url = url.split("&")[0]  # Temp fix for the &list issue
 
         logger.info("{} played {}".format(author.name, url))
+        await self.bot.say("Queued.")
         
         self._stop_player(server)
         self._clear_queue(server)
