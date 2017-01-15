@@ -161,7 +161,7 @@ class General:
         await self.bot.say("http://lmgtfy.com/?q={}".format(search_terms))
 
     @commands.command(no_pm=True, hidden=True)
-    async def hug(self, name : str, intensity : int=1):
+    async def hug(self, *, name : str, " as ", intensity : int=1):
         """Because everyone likes hugs
 
         Up to 15 intensity levels."""
