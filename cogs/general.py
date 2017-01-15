@@ -178,6 +178,7 @@ class General:
             msg = "(づ￣ ³￣)づ*" + name + "*⊂(´・ω・｀⊂)"
         elif intensity >= 15:
             msg = "(づ♡ 3♡)づ*" + name + "*⊂('^▽^´⊂)"
+        await self.bot.say(msg)
 
     @commands.command(pass_context=True, no_pm=True, hidden=True)
     async def sue(self, ctx, user : discord.Member):
