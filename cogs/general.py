@@ -161,10 +161,11 @@ class General:
         await self.bot.say("http://lmgtfy.com/?q={}".format(search_terms))
 
     @commands.command(no_pm=True, hidden=True)
-    async def hug(self, *, name : str, " as ", intensity : int=1):
+    async def hug(self, user : discord.Member, intensity : int=1):
         """Because everyone likes hugs
 
-        Up to 15 intensity levels."""
+        Up to 10 intensity levels."""
+        name = user.name
         if intensity <= 0:
             msg = "(っ˘̩╭╮˘̩)っ *" + name + "*"
         elif intensity <= 3:
