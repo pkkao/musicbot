@@ -161,36 +161,22 @@ class General:
         await self.bot.say("http://lmgtfy.com/?q={}".format(search_terms))
 
     @commands.command(no_pm=True, hidden=True)
-    async def hug(self, *, name : str, intensity : int=1):
+    async def hug(self, name : str, intensity : int=1):
         """Because everyone likes hugs
 
         Up to 15 intensity levels."""
-
-        name = name.split(" ")
-        try:
-            if len(name) > 1:
-                pos = int(name[-1]) - 1
-                name = name[:-1]
-            else:
-                pos = 0
-        except ValueError:
-            pos = 0
-        try:
-            if intensity <= 0:
-                msg = "(っ˘̩╭╮˘̩)っ *" + name + "*"
-            elif intensity <= 3:
-                msg = "(っ´▽｀)っ *" + name + "*"
-            elif intensity <= 6:
-                msg = "╰(*´︶`*)╯ *" + name + "*"
-            elif intensity <= 9:
-                msg = "(つ≧▽≦)つ *" + name + "*"
-            elif intensity <= 12:
-                msg = "(づ￣ ³￣)づ*" + name + "*⊂(´・ω・｀⊂)"
-            elif intensity >= 15:
-                msg = "(づ♡ 3♡)づ*" + name + "*⊂('^▽^´⊂)"
-            await self.bot.say(msg)
-        except:
-            await self.bot.say("Error.")
+        if intensity <= 0:
+            msg = "(っ˘̩╭╮˘̩)っ *" + name + "*"
+        elif intensity <= 3:
+            msg = "(っ´▽｀)っ *" + name + "*"
+        elif intensity <= 6:
+            msg = "╰(*´︶`*)╯ *" + name + "*"
+        elif intensity <= 9:
+            msg = "(つ≧▽≦)つ *" + name + "*"
+        elif intensity <= 12:
+            msg = "(づ￣ ³￣)づ*" + name + "*⊂(´・ω・｀⊂)"
+        elif intensity >= 15:
+            msg = "(づ♡ 3♡)づ*" + name + "*⊂('^▽^´⊂)"
 
     @commands.command(pass_context=True, no_pm=True, hidden=True)
     async def sue(self, ctx, user : discord.Member):
