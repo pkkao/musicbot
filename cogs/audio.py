@@ -1724,23 +1724,24 @@ class Audio:
             await self.bot.say("Can't skip if I'm not playing.")
 
     def can_instaskip(self, member):
-        server = member.server
+        #server = member.server
 
-        if not self.get_server_settings(server)["VOTE_ENABLED"]:
-            return True
+        #if not self.get_server_settings(server)["VOTE_ENABLED"]:
+            #return True
 
-        admin_role = settings.get_server_admin(server)
-        mod_role = settings.get_server_mod(server)
+        #admin_role = settings.get_server_admin(server)
+        #mod_role = settings.get_server_mod(server)
 
-        is_owner = member.id == settings.owner
-        is_admin = discord.utils.get(member.roles, name=admin_role) is not None
-        is_mod = discord.utils.get(member.roles, name=mod_role) is not None
+        #is_owner = member.id == settings.owner
+        #is_admin = discord.utils.get(member.roles, name=admin_role) is not None
+        #is_mod = discord.utils.get(member.roles, name=mod_role) is not None
 
 
-        nonbots = sum(not m.bot for m in member.voice_channel.voice_members)
-        alone = nonbots <= 1
+        #nonbots = sum(not m.bot for m in member.voice_channel.voice_members)
+        #alone = nonbots <= 1
 
-        return is_owner or is_admin or alone
+        #return is_owner or is_admin or alone
+        return False
 
     @commands.command(pass_context=True, no_pm=True)
     async def sing(self, ctx):
