@@ -19,7 +19,7 @@ class General:
         self.ball = ["Hell yes","Eh, sure","Sure why not","Yes!!!","Yes","Yeah","Probably",
                      "I'm just a lowly bot, I wouldn't know","Hey why don't you ask thisisnotabot","Beats me",
                      "Nah","No","No!!!","Are you serious? No way","Um...how about no","Eh probably not","Nooooooo"]
-        self.userlist = ["tinaun","peyrin","painty-can","beans","bias","BlueRibbonCommittee","BMC","boxelder","Dark Homer","DoctorMcGann","Godot","hamm","hutz","inmate","insomnia","justin","kaos","kupomog","LTTR","Matty","moose","OldSchoolerMicRuler","Nicky","Nilbog","paddlin","parklife","RobynS","Ryan","samuelle_emanuelle","Shaunbadia","sir hops","SmilingPolitely","The Great Remin","scully apologist","tormented","Torrens","Tromboon","Telso","jay","Judge Fudge","likecharges"]
+        self.userlist = ["deadname","peyrin","painty-can","beans","bias","Esteban De La Sexface","BMC","boxelder","Dark Homer","DoctorMcGann","Dobbie","Egg","hops","hamm","hutz","inmate","insomnia","justin","kaos","kupomog","LTTR","Matty","moose","OldSchoolerMicRuler","Nicky","paddlin","parklife","RobynS","Ryan","handsome","Shaunbadia","sir hops","SmilingPolitely","The Great Remin","scully apologist","tormented","Torrens","Tromboon","Telso","jay","Judge Fudge","comeau","AlphaOmega","c l o n e","SVT","Yossarian"]
         self.poll_sessions = []
 
     @commands.command(hidden=True)
