@@ -785,7 +785,7 @@ class Audio:
 
         self._setup_queue(server)
         self._set_queue_playlist(server, name)
-        self._set_queue_repeat(server, True)
+        self._set_queue_repeat(server, False)
         self._set_queue(server, songlist)
 
     def _play_local_playlist(self, server, name):
