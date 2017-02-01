@@ -103,14 +103,14 @@ class Bank:
         self.accounts[server.id][user.id] = account
         self._save_bank()
 
-    def set_credits(self, user, amount):
-        server = user.server
-        if amount < 0:
-            raise NegativeValue()
-        account = self._get_account(user)
-        account["balance"] = amount
-        self.accounts[server.id][user.id] = account
-        self._save_bank()
+    #def set_credits(self, user, amount):
+        #server = user.server
+        #if amount < 0:
+            #raise NegativeValue()
+        #account = self._get_account(user)
+        #account["balance"] = amount
+        #self.accounts[server.id][user.id] = account
+        #self._save_bank()
 
     def transfer_credits(self, sender, receiver, amount):
         if amount < 0:
@@ -266,19 +266,19 @@ class Economy:
         except NoAccount:
             await self.bot.say("That user has no bank account.")
 
-    @_bank.command(name="set", pass_context=True)
-    @checks.admin_or_permissions(manage_server=True)
-    async def _set(self, ctx, user : discord.Member, sum : int):
-        """Sets credits of user's bank account
-
-        Admin/owner restricted."""
-        author = ctx.message.author
-        try:
-            self.bank.set_credits(user, sum)
-            logger.info("{}({}) set {} credits to {} ({})".format(author.name, author.id, str(sum), user.name, user.id))
-            await self.bot.say("{}'s credits have been set to {}".format(user.name, str(sum)))
-        except NoAccount:
-            await self.bot.say("User has no bank account.")
+    #@_bank.command(name="set", pass_context=True)
+    #@checks.admin_or_permissions(manage_server=True)
+    #async def _set(self, ctx, user : discord.Member, sum : int):
+        #"""Sets credits of user's bank account
+#
+        #Admin/owner restricted."""
+        #author = ctx.message.author
+        #try:
+            #self.bank.set_credits(user, sum)
+            #logger.info("{}({}) set {} credits to {} ({})".format(author.name, author.id, str(sum), user.name, user.id))
+            #await self.bot.say("{}'s credits have been set to {}".format(user.name, str(sum)))
+        #except NoAccount:
+            #await self.bot.say("User has no bank account.")
 
     @commands.command(pass_context=True, no_pm=True)
     async def payday(self, ctx): # TODO
