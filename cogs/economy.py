@@ -389,7 +389,7 @@ class Economy:
             await self.bot.say("{} You need an account to use the slot machine. Type `{}bank register` to open one.".format(author.mention, ctx.prefix))
             return
         if self.bank.can_spend(author, bid):
-            if bid >= self.settings[server.id]["SLOT_MIN"] and bid <= self.settings[server.id]["SLOT_MAX"]:
+            if bid >= self.settings[server.id]["SLOT_MIN"]:
                 if author.id in self.slot_register:
                     if abs(self.slot_register[author.id] - int(time.perf_counter()))  >= self.settings[server.id]["SLOT_TIME"]:
                         self.slot_register[author.id] = int(time.perf_counter())
@@ -400,7 +400,7 @@ class Economy:
                     self.slot_register[author.id] = int(time.perf_counter())
                     await self.slot_machine(ctx.message, bid)
             else:
-                await self.bot.say("{0} Bid must be between {1} and {2}.".format(author.mention, self.settings[server.id]["SLOT_MIN"], self.settings[server.id]["SLOT_MAX"]))
+                await self.bot.say("{0} Bid must be more than {1}.".format(author.mention, self.settings[server.id]["SLOT_MIN"])
         else:
             await self.bot.say("{0} You need an account with enough funds to play the slot machine.".format(author.mention))
 
@@ -472,13 +472,13 @@ class Economy:
         await self.bot.say("Minimum bid is now " + str(bid) + " credits.")
         dataIO.save_json(self.file_path, self.settings)
 
-    @economyset.command(pass_context=True)
-    async def slotmax(self, ctx, bid : int):
-        """Maximum slot machine bid"""
-        server = ctx.message.server
-        self.settings[server.id]["SLOT_MAX"] = bid
-        await self.bot.say("Maximum bid is now " + str(bid) + " credits.")
-        dataIO.save_json(self.file_path, self.settings)
+    #@economyset.command(pass_context=True)
+    #async def slotmax(self, ctx, bid : int):
+        #"""Maximum slot machine bid"""
+        #server = ctx.message.server
+        #self.settings[server.id]["SLOT_MAX"] = bid
+        #await self.bot.say("Maximum bid is now " + str(bid) + " credits.")
+        #dataIO.save_json(self.file_path, self.settings)
 
     @economyset.command(pass_context=True)
     async def slottime(self, ctx, seconds : int):
