@@ -303,15 +303,7 @@ class Economy:
             await self.bot.say("{} You need an account to receive credits. Type `{}bank register` to open one.".format(author.mention, ctx.prefix))
 
     @commands.group(pass_context=True)
-    async def leaderboard(self, ctx):
-        """Server / global leaderboard
-
-        Defaults to server"""
-        if ctx.invoked_subcommand is None:
-            await ctx.invoke(self._server_leaderboard)
-
-    @leaderboard.command(name="server", pass_context=True)
-    async def _server_leaderboard(self, ctx, top : int=30):
+    async def leaderboard(self, ctx, top : int=10):
         """Prints out the server's leaderboard
 
         Defaults to top 10""" #Originally coded by Airenkun - edited by irdumb
@@ -338,36 +330,36 @@ class Economy:
         else:
             await self.bot.say("There are no accounts in the bank.")
 
-    @leaderboard.command(name="global")
-    async def _global_leaderboard(self, top : int=10):
-        """Prints out the global leaderboard
+    #@leaderboard.command(name="global")
+    #async def _global_leaderboard(self, top : int=10):
+        #"""Prints out the global leaderboard
 
-        Defaults to top 10"""
-        if top < 1:
-            top = 10
-        bank_sorted = sorted(self.bank.get_all_accounts(),
-         key=lambda x: x.balance, reverse=True)
-        unique_accounts = []
-        for acc in bank_sorted:
-            if not self.already_in_list(unique_accounts, acc):
-                unique_accounts.append(acc)
-        if len(unique_accounts) < top:
-            top = len(unique_accounts)
-        topten = unique_accounts[:top]
-        highscore = ""
-        place = 1
-        for acc in topten:
-            highscore += str(place).ljust(len(str(top))+1)
-            highscore += ("{} |{}| ".format(acc.name, acc.server.name)).ljust(23-len(str(acc.balance)))
-            highscore += str(acc.balance) + "\n"
-            place += 1
-        if highscore:
-            if len(highscore) < 1985:
-                await self.bot.say("```py\n"+highscore+"```")
-            else:
-                await self.bot.say("The leaderboard is too big to be displayed. Try with a lower <top> parameter.")
-        else:
-            await self.bot.say("There are no accounts in the bank.")
+        #Defaults to top 10"""
+        #if top < 1:
+            #top = 10
+        #bank_sorted = sorted(self.bank.get_all_accounts(),
+         #key=lambda x: x.balance, reverse=True)
+        #unique_accounts = []
+        #for acc in bank_sorted:
+            #if not self.already_in_list(unique_accounts, acc):
+                #unique_accounts.append(acc)
+        #if len(unique_accounts) < top:
+            #top = len(unique_accounts)
+        #topten = unique_accounts[:top]
+        #highscore = ""
+        #place = 1
+        #for acc in topten:
+            #highscore += str(place).ljust(len(str(top))+1)
+            #highscore += ("{} |{}| ".format(acc.name, acc.server.name)).ljust(23-len(str(acc.balance)))
+            #highscore += str(acc.balance) + "\n"
+            #place += 1
+        #if highscore:
+            #if len(highscore) < 1985:
+                #await self.bot.say("```py\n"+highscore+"```")
+            #else:
+                #await self.bot.say("The leaderboard is too big to be displayed. Try with a lower <top> parameter.")
+        #else:
+            #await self.bot.say("There are no accounts in the bank.")
 
     def already_in_list(self, accounts, user):
         for acc in accounts:
