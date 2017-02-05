@@ -400,7 +400,7 @@ class Economy:
                     self.slot_register[author.id] = int(time.perf_counter())
                     await self.slot_machine(ctx.message, bid)
             else:
-                await self.bot.say("{0} Bid must be more than {1}.".format(author.mention, self.settings[server.id]["SLOT_MIN"])
+                await self.bot.say("Bid must be more than 0.")
         else:
             await self.bot.say("{0} You need an account with enough funds to play the slot machine.".format(author.mention))
 
