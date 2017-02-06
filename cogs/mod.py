@@ -183,21 +183,14 @@ class Mod:
                     await self.bot.say("I will not delete command messages.")
 
     @commands.command(no_pm=True, pass_context=True)
-    async def testkick(self, ctx, user: discord.Member):
-        offline = str("offline")
-        if user.status == offline:
-            await self.bot.say("Don't kick offline members")
-            return
-        await self.bot.say("Kicked")
-
-    @commands.command(no_pm=True, pass_context=True)
     @checks.admin_or_permissions(kick_members=True)
     async def kick(self, ctx, user: discord.Member):
         """Kicks user."""
         author = ctx.message.author
         server = author.server
-        if user.status == 'offline':
-            await self.bot.say("Don't kick offline members")
+        offline = str(user.status)
+        if offline == "offline":
+            await self.bot.say("Don't kick offline members thx")
             return
         try:
             await self.bot.kick(user)
