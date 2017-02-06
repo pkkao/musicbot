@@ -188,6 +188,9 @@ class Mod:
         """Kicks user."""
         author = ctx.message.author
         server = author.server
+        if user.status == "offline":
+            await self.bot.say("Don't kick offline members")
+            return
         try:
             await self.bot.kick(user)
             logger.info("{}({}) kicked {}({})".format(
