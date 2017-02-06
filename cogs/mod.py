@@ -184,10 +184,7 @@ class Mod:
 
     @commands.command(no_pm=True, pass_context=True)
     async def testkick(self, ctx, user: discord.Member):
-        if user.status == "offline":
-            await self.bot.say("Don't kick offline members")
-            return
-        await self.bot.say("Kicked")
+        await self.bot.say(user.status)
 
     @commands.command(no_pm=True, pass_context=True)
     @checks.admin_or_permissions(kick_members=True)
