@@ -184,7 +184,8 @@ class Mod:
 
     @commands.command(no_pm=True, pass_context=True)
     async def testkick(self, ctx, user: discord.Member):
-        if user.status == 'offline':
+        offline = str("offline")
+        if user.status == offline:
             await self.bot.say("Don't kick offline members")
             return
         await self.bot.say("Kicked")
