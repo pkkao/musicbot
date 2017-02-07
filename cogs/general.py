@@ -187,7 +187,7 @@ class General:
                 user = ctx.message.author
                 await self.bot.say("Nice try. You think this is funny? How about let's sue {}, huh?".format(user.mention))
         else:
-            await self.bot.say("{} has been sued.".format(user.mention))
+            await self.bot.say("{} has been sued".format(user.mention))
 
     @commands.command(pass_context=True, no_pm=True)
     async def userinfo(self, ctx, user: discord.Member=None):
