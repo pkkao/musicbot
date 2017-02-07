@@ -189,9 +189,6 @@ class Mod:
         author = ctx.message.author
         server = author.server
         offline = str(user.status)
-        if offline == "offline":
-            await self.bot.say("Don't kick offline members thx")
-            return
         try:
             await self.bot.kick(user)
             logger.info("{}({}) kicked {}({})".format(
@@ -206,34 +203,34 @@ class Mod:
         except Exception as e:
             print(e)
 
-    @commands.command(no_pm=True, pass_context=True)
-    @checks.admin_or_permissions(ban_members=True)
-    async def ban(self, ctx, user: discord.Member, days: int=0):
-        """Bans user and deletes last X days worth of messages.
+    #@commands.command(no_pm=True, pass_context=True)
+    #@checks.admin_or_permissions(ban_members=True)
+    #async def ban(self, ctx, user: discord.Member, days: int=0):
+        #"""Bans user and deletes last X days worth of messages.
 
-        Minimum 0 days, maximum 7. Defaults to 0."""
-        author = ctx.message.author
-        server = author.server
-        if days < 0 or days > 7:
-            await self.bot.say("Invalid days. Must be between 0 and 7.")
-            return
-        try:
-            self._tmp_banned_cache.append(user)
-            await self.bot.ban(user, days)
-            logger.info("{}({}) banned {}({}), deleting {} days worth of messages".format(
-                author.name, author.id, user.name, user.id, str(days)))
-            await self.new_case(server,
-                                action="Ban \N{HAMMER}",
-                                mod=author,
-                                user=user)
-            await self.bot.say("Done. It was about time.")
-        except discord.errors.Forbidden:
-            await self.bot.say("I'm not allowed to do that.")
-        except Exception as e:
-            print(e)
-        finally:
-            await asyncio.sleep(1)
-            self._tmp_banned_cache.remove(user)
+        #Minimum 0 days, maximum 7. Defaults to 0."""
+        #author = ctx.message.author
+        #server = author.server
+        #if days < 0 or days > 7:
+            #await self.bot.say("Invalid days. Must be between 0 and 7.")
+            #return
+        #try:
+            #self._tmp_banned_cache.append(user)
+            #await self.bot.ban(user, days)
+            #logger.info("{}({}) banned {}({}), deleting {} days worth of messages".format(
+                #author.name, author.id, user.name, user.id, str(days)))
+            #await self.new_case(server,
+                                #action="Ban \N{HAMMER}",
+                                #mod=author,
+                                #user=user)
+            #await self.bot.say("Done. It was about time.")
+        #except discord.errors.Forbidden:
+            #await self.bot.say("I'm not allowed to do that.")
+        #except Exception as e:
+            #print(e)
+        #finally:
+            #await asyncio.sleep(1)
+            #self._tmp_banned_cache.remove(user)
 
     @commands.command(no_pm=True, pass_context=True)
     @checks.admin_or_permissions(ban_members=True)
