@@ -218,7 +218,7 @@ class Economy:
 
     @_bank.command(pass_context=True, no_pm=True)
     async def register(self, ctx):
-        """Registers an account at the Twentysix bank"""
+        """Registers an account at the goodchat bank"""
         user = ctx.message.author
         credits = 0
         if ctx.message.server.id in self.settings:
@@ -443,7 +443,7 @@ class Economy:
         await self.bot.send_message(message.channel, slotMsg)
 
     @commands.group(pass_context=True, no_pm=True)
-    @checks.admin_or_permissions(manage_server=True)
+    @checks.serverowner_or_permissions(manage_server=True)
     async def economyset(self, ctx):
         """Changes economy module settings"""
         server = ctx.message.server
