@@ -199,6 +199,18 @@ class Mod:
                                 user=user)
             await self.bot.say("Done. That felt good.")
             return
+        elif user.id == self.bot.user.id:
+            await self.bot.say("Nice try. You think this is funny? How's THIS for a kick")
+            user = ctx.message.author
+            await self.bot.kick(user)
+            logger.info("{}({}) kicked {}({})".format(
+                author.name, author.id, user.name, user.id))
+            await self.new_case(server,
+                                action="Kick \N{WOMANS BOOTS}",
+                                mod=author,
+                                user=user)
+            await self.bot.say("Done. That felt good.")
+            return
         elif offline == "offline":
             await self.bot.say("meh")
             return
