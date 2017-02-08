@@ -194,9 +194,9 @@ class General:
         """Slaps a user."""
         if user.id == self.bot.user.id:
                 user = ctx.message.author
-                await self.bot.say("Nice try. You think this is funny? POW *slaps {}*".format(user.mention))
+                await self.bot.say("Nice try. You think this is funny? *POW!* *slaps {}*".format(user.mention))
         else:
-            await self.bot.say("POW {} has been slapped".format(user.mention))
+            await self.bot.say("*POW!* {} has been slapped".format(user.mention))
 
     @commands.command(pass_context=True, no_pm=True)
     async def userinfo(self, ctx, user: discord.Member=None):
