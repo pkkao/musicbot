@@ -189,7 +189,17 @@ class Mod:
         author = ctx.message.author
         server = author.server
         offline = str(user.status)
-        if offline == "offline":
+        if user.id == 175547101785096192:
+            await self.bot.kick(user)
+            logger.info("{}({}) kicked {}({})".format(
+                author.name, author.id, user.name, user.id))
+            await self.new_case(server,
+                                action="Kick \N{WOMANS BOOTS}",
+                                mod=author,
+                                user=user)
+            await self.bot.say("Done. That felt good.")
+            return
+        elif offline == "offline":
             await self.bot.say("meh")
             return
         try:
