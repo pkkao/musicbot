@@ -189,6 +189,9 @@ class Mod:
         author = ctx.message.author
         server = author.server
         offline = str(user.status)
+        if offline == "offline":
+            await self.bot.say("meh")
+            return
         try:
             await self.bot.kick(user)
             logger.info("{}({}) kicked {}({})".format(
