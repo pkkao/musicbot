@@ -129,7 +129,7 @@ class General:
     async def donation(self):
         """Donate credits
         """
-        await self.bot.say("Help " + randchoice(self.userlist) + "!!!!")
+        await self.bot.say("Help " + randchoice(self.banklist) + "!!!!")
 
     @commands.command(name="fahrenheit")
     async def fahrenheit(self, *, temp : int):
