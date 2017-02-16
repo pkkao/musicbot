@@ -228,7 +228,7 @@ class Economy:
             await self.bot.say("{} Account opened. Current balance: {}".format(user.mention,
                 account.balance))
         except AccountAlreadyExists:
-            await self.bot.say("{} You already have an account at the Twentysix bank.".format(user.mention))
+            await self.bot.say("{} You already have an account at the goodchat bank.".format(user.mention))
 
     @_bank.command(pass_context=True)
     async def balance(self, ctx, user : discord.Member=None):
@@ -240,7 +240,7 @@ class Economy:
             try:
                 await self.bot.say("{} Your balance is: {}".format(user.mention, self.bank.get_balance(user)))
             except NoAccount:
-                await self.bot.say("{} You don't have an account at the Twentysix bank."
+                await self.bot.say("{} You don't have an account at the goodchat bank."
                  " Type `{}bank register` to open one.".format(user.mention, ctx.prefix))
         else:
             try:
