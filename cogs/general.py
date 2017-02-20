@@ -81,37 +81,37 @@ class General:
         else:
             await self.bot.say("*flips a coin and... " + randchoice(["HEADS!*", "TAILS!*"]))
 
-    @commands.command(pass_context=True)
-    async def rps(self, ctx, choice : str):
-        """Play rock paper scissors"""
-        author = ctx.message.author
-        rpsbot = {"rock" : ":moyai:",
-           "paper": ":page_facing_up:",
-           "scissors":":scissors:"}
-        choice = choice.lower()
-        if choice in rpsbot.keys():
-            botchoice = randchoice(list(rpsbot.keys()))
-            msgs = {
-                "win": " You win {}!".format(author.mention),
-                "square": " We're square {}!".format(author.mention),
-                "lose": " You lose {}!".format(author.mention)
-            }
-            if choice == botchoice:
-                await self.bot.say(rpsbot[botchoice] + msgs["square"])
-            elif choice == "rock" and botchoice == "paper":
-                await self.bot.say(rpsbot[botchoice] + msgs["lose"])
-            elif choice == "rock" and botchoice == "scissors":
-                await self.bot.say(rpsbot[botchoice] + msgs["win"])
-            elif choice == "paper" and botchoice == "rock":
-                await self.bot.say(rpsbot[botchoice] + msgs["win"])
-            elif choice == "paper" and botchoice == "scissors":
-                await self.bot.say(rpsbot[botchoice] + msgs["lose"])
-            elif choice == "scissors" and botchoice == "rock":
-                await self.bot.say(rpsbot[botchoice] + msgs["lose"])
-            elif choice == "scissors" and botchoice == "paper":
-                await self.bot.say(rpsbot[botchoice] + msgs["win"])
-        else:
-            await self.bot.say("Choose rock, paper or scissors.")
+    #@commands.command(pass_context=True)
+    #async def rps(self, ctx, choice : str):
+        #"""Play rock paper scissors"""
+        #author = ctx.message.author
+        #rpsbot = {"rock" : ":moyai:",
+           #"paper": ":page_facing_up:",
+           #"scissors":":scissors:"}
+        #choice = choice.lower()
+        #if choice in rpsbot.keys():
+            #botchoice = randchoice(list(rpsbot.keys()))
+            #msgs = {
+                #"win": " You win {}!".format(author.mention),
+                #"square": " We're square {}!".format(author.mention),
+                #"lose": " You lose {}!".format(author.mention)
+            #}
+            #if choice == botchoice:
+                #await self.bot.say(rpsbot[botchoice] + msgs["square"])
+            #elif choice == "rock" and botchoice == "paper":
+                #await self.bot.say(rpsbot[botchoice] + msgs["lose"])
+            #elif choice == "rock" and botchoice == "scissors":
+                #await self.bot.say(rpsbot[botchoice] + msgs["win"])
+            #elif choice == "paper" and botchoice == "rock":
+                #await self.bot.say(rpsbot[botchoice] + msgs["win"])
+            #elif choice == "paper" and botchoice == "scissors":
+                #await self.bot.say(rpsbot[botchoice] + msgs["lose"])
+            #elif choice == "scissors" and botchoice == "rock":
+                #await self.bot.say(rpsbot[botchoice] + msgs["lose"])
+            #elif choice == "scissors" and botchoice == "paper":
+                #await self.bot.say(rpsbot[botchoice] + msgs["win"])
+        #else:
+            #await self.bot.say("Choose rock, paper or scissors.")
 
     @commands.command(name="8", aliases=["8ball"])
     async def _8ball(self, *, question : str):
