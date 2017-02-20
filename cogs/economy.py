@@ -4,6 +4,7 @@ from cogs.utils.dataIO import dataIO
 from collections import namedtuple, defaultdict
 from datetime import datetime
 from random import randint
+from random import choice as randchoice
 from copy import deepcopy
 from .utils import checks
 from __main__ import send_cmd_help
@@ -371,6 +372,50 @@ class Economy:
     async def payouts(self):
         """Shows slot machine payouts"""
         await self.bot.whisper(slot_payouts)
+
+    
+    @commands.command(pass_context=True)
+    async def rps(self, ctx, choice : str, bid : int):
+        """Play rock paper scissors. format:
+
+        !rps "rock" 10"""
+        author = ctx.message.author
+        rpsbot = {"rock" : ":moyai:",
+           "paper": ":page_facing_up:",
+           "scissors":":scissors:"}
+        choice = choice.lower()
+        if choice in rpsbot.keys():
+            botchoice = randchoice(list(rpsbot.keys()))
+            msgs = {
+                "win": " You win {}!".format(author.mention),
+                "square": " We're square {}!".format(author.mention),
+                "lose": " You lose {}!".format(author.mention)
+            }
+            rpsmsg = ""
+            if choice == botchoice:
+                rpsmsg = rpsbot[botchoice] + msgs["square"]
+            elif choice == "rock" and botchoice == "paper":
+                self.bank.withdraw_credits(author, bid)
+                rpsmsg = rpsbot[botchoice] + msgs["lose"]
+            elif choice == "rock" and botchoice == "scissors":
+                self.bank.deposit_credits(author, bid)
+                rpsmsg = rpsbot[botchoice] + msgs["win"]
+            elif choice == "paper" and botchoice == "rock":
+                self.bank.deposit_credits(author, bid)
+                rpsmsg = rpsbot[botchoice] + msgs["win"]
+            elif choice == "paper" and botchoice == "scissors":
+                self.bank.withdraw_credits(author, bid)
+                rpsmsg = rpsbot[botchoice] + msgs["lose"]
+            elif choice == "scissors" and botchoice == "rock":
+                self.bank.withdraw_credits(author, bid)
+                rpsmsg = rpsbot[botchoice] + msgs["lose"]
+            elif choice == "scissors" and botchoice == "paper":
+                self.bank.deposit_credits(author, bid)
+                rpsmsg = rpsbot[botchoice] + msgs["win"]
+            rpsmsg += "\n" + " Current credits: {}".format(self.bank.get_balance(author))            
+            await self.bot.say(rpsmsg)
+        else:
+            await self.bot.say("Format: `!rps \"rock\" 10`")
 
     @commands.command(pass_context=True, no_pm=True)
     async def slot(self, ctx, bid : int):
