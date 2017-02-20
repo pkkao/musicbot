@@ -1776,6 +1776,8 @@ class Audio:
                     dur = "{0}:{1:0>2}".format(m, s)
             else:
                 dur = None
+            if song.creator.endswith("Listen ad-free with YouTube Red"):
+                song.creator = song.creator[:-31]           
             msg = ("\n**Title:** {}\n**Author:** {}\n**Duration:** {}\n\n<{}>".format(
                        song.title, song.creator, dur, song.webpage_url))
             await self.bot.say(msg.replace("**Author:** None\n", "")
