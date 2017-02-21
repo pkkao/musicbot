@@ -384,38 +384,42 @@ class Economy:
            "paper": ":page_facing_up:",
            "scissors":":scissors:"}
         choice = choice.lower()
-        if choice in rpsbot.keys():
-            botchoice = randchoice(list(rpsbot.keys()))
-            msgs = {
-                "win": " You win {}!".format(author.mention),
-                "square": " We're square {}!".format(author.mention),
-                "lose": " You lose {}!".format(author.mention)
-            }
-            rpsmsg = ""
-            if choice == botchoice:
-                rpsmsg = rpsbot[botchoice] + msgs["square"]
-            elif choice == "rock" and botchoice == "paper":
-                self.bank.withdraw_credits(author, bid)
-                rpsmsg = rpsbot[botchoice] + msgs["lose"]
-            elif choice == "rock" and botchoice == "scissors":
-                self.bank.deposit_credits(author, bid)
-                rpsmsg = rpsbot[botchoice] + msgs["win"]
-            elif choice == "paper" and botchoice == "rock":
-                self.bank.deposit_credits(author, bid)
-                rpsmsg = rpsbot[botchoice] + msgs["win"]
-            elif choice == "paper" and botchoice == "scissors":
-                self.bank.withdraw_credits(author, bid)
-                rpsmsg = rpsbot[botchoice] + msgs["lose"]
-            elif choice == "scissors" and botchoice == "rock":
-                self.bank.withdraw_credits(author, bid)
-                rpsmsg = rpsbot[botchoice] + msgs["lose"]
-            elif choice == "scissors" and botchoice == "paper":
-                self.bank.deposit_credits(author, bid)
-                rpsmsg = rpsbot[botchoice] + msgs["win"]
-            rpsmsg += "\n" + " Current credits: {}".format(self.bank.get_balance(author))            
-            await self.bot.say(rpsmsg)
+        if self.bank.can_spend(author, bid):
+            if choice in rpsbot.keys():
+                botchoice = randchoice(list(rpsbot.keys()))
+                msgs = {
+                    "win": " You win {}!".format(author.mention),
+                    "square": " We're square {}!".format(author.mention),
+                    "lose": " You lose {}!".format(author.mention)
+                }
+                rpsmsg = ""
+                if choice == botchoice:
+                    rpsmsg = rpsbot[botchoice] + msgs["square"]
+                elif choice == "rock" and botchoice == "paper":
+                    self.bank.withdraw_credits(author, bid)
+                    rpsmsg = rpsbot[botchoice] + msgs["lose"]
+                elif choice == "rock" and botchoice == "scissors":
+                    self.bank.deposit_credits(author, bid)
+                    rpsmsg = rpsbot[botchoice] + msgs["win"]
+                elif choice == "paper" and botchoice == "rock":
+                    self.bank.deposit_credits(author, bid)
+                    rpsmsg = rpsbot[botchoice] + msgs["win"]
+                elif choice == "paper" and botchoice == "scissors":
+                    self.bank.withdraw_credits(author, bid)
+                    rpsmsg = rpsbot[botchoice] + msgs["lose"]
+                elif choice == "scissors" and botchoice == "rock":
+                    self.bank.withdraw_credits(author, bid)
+                    rpsmsg = rpsbot[botchoice] + msgs["lose"]
+                elif choice == "scissors" and botchoice == "paper":
+                    self.bank.deposit_credits(author, bid)
+                    rpsmsg = rpsbot[botchoice] + msgs["win"]
+                rpsmsg += "\n" + " Current credits: {}".format(self.bank.get_balance(author))            
+                await self.bot.say(rpsmsg)
+            else:
+                await self.bot.say("Format: `!rps \"rock\" 10`")
         else:
-            await self.bot.say("Format: `!rps \"rock\" 10`")
+            await self.bot.say("{0} You need an account with enough funds to play the slot machine.".format(author.mention))
+
 
     @commands.command(pass_context=True, no_pm=True)
     async def slot(self, ctx, bid : int):
