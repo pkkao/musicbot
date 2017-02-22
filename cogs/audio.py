@@ -1761,11 +1761,11 @@ class Audio:
 
         song = self._get_queue_nowplaying(server)
         if song:
-            if hasattr(song, 'creator'):
-                if song.creator.endswith("Listen ad-free with YouTube Red"):
-                    song.creator = song.creator[:-31] 
             if not hasattr(song, 'creator'):
                 song.creator = None
+            elif hasattr(song, 'creator'):
+                if song.creator.endswith("Listen ad-free with YouTube Red"):
+                    song.creator = song.creator[:-31] 
             if not hasattr(song, 'view_count'):
                 song.view_count = None
             if not hasattr(song, 'uploader'):
