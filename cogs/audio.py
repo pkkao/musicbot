@@ -1761,6 +1761,9 @@ class Audio:
 
         song = self._get_queue_nowplaying(server)
         if song:
+            if hasattr(song, 'creator'):
+                if song.creator.endswith("Listen ad-free with YouTube Red"):
+                    song.creator = song.creator[:-31] 
             if not hasattr(song, 'creator'):
                 song.creator = None
             if not hasattr(song, 'view_count'):
@@ -1775,10 +1778,7 @@ class Audio:
                 else:
                     dur = "{0}:{1:0>2}".format(m, s)
             else:
-                dur = None
-            if hasattr(song, 'creator'):
-                if song.creator.endswith("Listen ad-free with YouTube Red"):
-                    song.creator = song.creator[:-31]           
+                dur = None          
             msg = ("\n**Title:** {}\n**Author:** {}\n**Duration:** {}\n\n<{}>".format(
                        song.title, song.creator, dur, song.webpage_url))
             await self.bot.say(msg.replace("**Author:** None\n", "")
