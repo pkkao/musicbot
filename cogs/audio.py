@@ -1782,7 +1782,7 @@ class Audio:
                                   .replace("**Views:** None\n", "")
                                   .replace("**Uploader:** None\n", "")
                                   .replace("**Duration:** None\n", "")
-                                  .replace("Listen ad-free with YouTube red", ""))
+                                  .replace("Listen ad-free with YouTube Red", ""))
         else:
             await self.bot.say("Darude - Sandstorm.")
 
