@@ -1763,9 +1763,6 @@ class Audio:
         if song:
             if not hasattr(song, 'creator'):
                 song.creator = None
-            elif hasattr(song, 'creator'):
-                if song.creator.endswith("Listen ad-free with YouTube Red"):
-                    song.creator = song.creator[:-31] 
             if not hasattr(song, 'view_count'):
                 song.view_count = None
             if not hasattr(song, 'uploader'):
@@ -1784,7 +1781,8 @@ class Audio:
             await self.bot.say(msg.replace("**Author:** None\n", "")
                                   .replace("**Views:** None\n", "")
                                   .replace("**Uploader:** None\n", "")
-                                  .replace("**Duration:** None\n", ""))
+                                  .replace("**Duration:** None\n", "")
+                                  .replace("Listen ad-free with YouTube red", ""))
         else:
             await self.bot.say("Darude - Sandstorm.")
 
