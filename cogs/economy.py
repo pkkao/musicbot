@@ -378,7 +378,7 @@ class Economy:
     async def rps(self, ctx, choice : str, bid : int):
         """Play rock paper scissors. format:
 
-        !rps "rock" 10"""
+        !rps rock 10"""
         author = ctx.message.author
         rpsbot = {"rock" : ":moyai:",
            "paper": ":page_facing_up:",
@@ -416,7 +416,7 @@ class Economy:
                 rpsmsg += "\n" + " Current credits: {}".format(self.bank.get_balance(author))            
                 await self.bot.say(rpsmsg)
             else:
-                await self.bot.say("Format: `!rps \"rock\" 10`")
+                await self.bot.say("Format: `!rps rock 10`")
         else:
             await self.bot.say("{0} You need an account with enough funds to play the slot machine.".format(author.mention))
 
