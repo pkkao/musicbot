@@ -15,7 +15,7 @@ class CustomCommands:
         self.c_commands = dataIO.load_json(self.file_path)
 
     @commands.command(pass_context=True, no_pm=True)
-    @checks.mod_or_permissions(administrator=True)
+    #@checks.mod_or_permissions(administrator=True)
     async def learn(self, ctx, command : str, *, text):
         """Adds a custom command
 
@@ -39,7 +39,7 @@ class CustomCommands:
             await self.bot.say("i can only remember one thing at a time!")
 
     @commands.command(pass_context=True, no_pm=True)
-    @checks.mod_or_permissions(administrator=True)
+    #@checks.mod_or_permissions(administrator=True)
     async def edit(self, ctx, command : str, *, text):
         """Edits a custom command
 
@@ -61,7 +61,7 @@ class CustomCommands:
              await self.bot.say("There are no custom commands in this server. Use learn [command] [text]")
 
     @commands.command(pass_context=True, no_pm=True)
-    @checks.mod_or_permissions(administrator=True)
+    #@checks.mod_or_permissions(administrator=True)
     async def forget(self, ctx, command : str):
         """Forgets something
 
