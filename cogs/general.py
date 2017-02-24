@@ -139,7 +139,15 @@ class General:
         if newtemp < 0:
             await self.bot.say(str(temp) + " degrees Fahrenheit is " + str(newtemp)[:5] + " degrees Celsius.")
         else:
-            await self.bot.say(str(temp) + " degrees Fahrenheit is " + str(newtemp)[:4] + " degrees Celsius.")            
+            await self.bot.say(str(temp) + " degrees Fahrenheit is " + str(newtemp)[:4] + " degrees Celsius.")
+
+    @commands.command(name="kelvin")
+    async def kelvin(self, *, temp : int):
+        """Converts Kelvin temperatures...for some reason
+        """
+        newcelsius = temp - 273.15
+        newfahrenheit = ((temp - 273.15) * 9.0/5.0) + 32
+        await self.bot.say(str(temp) + " Kelvin is " + str(round(newcelsius, 2)) + " degrees Celsius and " + str(round(newfahrenheit, 2)) + " degrees Fahrenheit.")
 
     @commands.command(name="celsius")
     async def celsius(self, *, temp : int):
