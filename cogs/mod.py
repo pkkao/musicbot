@@ -1387,10 +1387,8 @@ class Mod:
             else:
                 if discord.utils.get(server.roles, id='254063980123783168') in user.roles:
                     await self.bot.replace_roles(user, *[discord.utils.get(server.roles, name=color), discord.utils.get(server.roles, id='254063980123783168')])
-                    await self.bot.say("Done.")
                 else:
                     await self.bot.replace_roles(user, *[discord.utils.get(server.roles, name=color)])
-                    await self.bot.say("Done.")
         except AttributeError:
             await self.bot.say("Not a valid color.")
 
