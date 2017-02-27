@@ -1372,7 +1372,7 @@ class Mod:
 
     @commands.command(no_pm=True, pass_context=True)
     @checks.admin()
-    async def assignmod(self, ctx, user : discord.Member):
+    async def mod(self, ctx, user : discord.Member):
         server = ctx.message.server
         await self.bot.add_roles(user, *[discord.utils.get(server.roles, id='254063980123783168')])
         await self.bot.say("Done.")
