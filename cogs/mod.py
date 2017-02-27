@@ -72,7 +72,7 @@ class Mod:
                    "Delete delay: {delete_delay}\n"
                    "".format(**_settings))
             await self.bot.say(box(msg))
-
+        
     @modset.command(name="adminrole", pass_context=True, no_pm=True)
     async def _modset_adminrole(self, ctx, role_name: str):
         """Sets the admin role for this server, case insensitive."""
@@ -1370,6 +1370,22 @@ class Mod:
         empty = [p for p in iter(discord.PermissionOverwrite())]
         return original == empty
 
+    @commands.command(no_pm=True, pass_context=True)
+    @checks.admin()
+    async def assignmod(self, ctx, user : discord.Member):
+        server = ctx.message.server
+        await self.bot.add_roles(user, *[discord.utils.get(server.roles, id='254063980123783168')])
+        await self.bot.say("Done.")
+
+    @commands.command(no_pm=True, pass_context=True)
+    async def color(self, ctx, color : str):
+        user = ctx.message.author
+        server = ctx.message.server
+        if color == "overlord" or color == "Bots" or color == "mod wizard" or color == "mods":
+            await self.bot.say("Nice try.")
+        else:
+            await self.bot.add_roles(user, *[discord.utils.get(server.roles, name=color)])
+            await self.bot.say("Done.")
 
 def check_folders():
     folders = ("data", "data/mod/")
