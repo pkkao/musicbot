@@ -1382,11 +1382,11 @@ class Mod:
         user = ctx.message.author
         server = ctx.message.server
         try:
-            if color == "overlord" or color == "Bots" or color == "mods":
+            if color == "overlord" or color == "Bots" or color == "mods" or color == "can mod people":
                 await self.bot.say("Not a valid color.")
             else:
                 if discord.utils.get(server.roles, id='254063980123783168') in user.roles:
-                    await self.bot.replace_roles(user, *[discord.utils.get(server.roles, name=color), discord.utils.get(server.roles, id='254063980123783168')])
+                    await self.bot.replace_roles(user, *[discord.utils.get(server.roles, name=color), discord.utils.get(server.roles, id='254063980123783168'), discord.utils.get(server.roles, id='285903716379394049')])
                 else:
                     await self.bot.replace_roles(user, *[discord.utils.get(server.roles, name=color)])
         except AttributeError:
