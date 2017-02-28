@@ -19,7 +19,7 @@ class General:
         self.ball = ["Hell yes","Eh, sure","Sure why not","Yes!!!","Yes","Yeah","Probably",
                      "I'm just a lowly bot, I wouldn't know","Hey why don't you ask thisisnotabot","Beats me",
                      "Nah","No","No!!!","Are you serious? No way","Um...how about no","Eh probably not","Nooooooo"]
-        self.userlist = ["deadname","peyrin","painty-can","beans","bias","Esteban De La Sexface","BMC","boxelder","Dark Homer","DoctorMcGann","Dobbie","Egg","hops","hamm","hutz","inmate","insomnia","justin","kaos","kupomog","LTTR","Matty","moose","OldSchoolerMicRuler","Nicky","paddlin","parklife","RobynS","Ryan","handsome","Shaunbadia","sir hops","SmilingPolitely","The Great Remin","scully apologist","tormented","Torrens","Tromboon","Telso","jay","Judge Fudge","comeau","AlphaOmega","c l o n e","SVT","Yossarian"]
+        self.userlist = ["tinaun", "comeau", "Hops", "OldSchoolerMicRuler", "painty-can", "peyrin", "Smiling Politely", "Cleve Boy", "BMC", "AlphaOmega", "BlueRibbonCommittee", "kat", "c l o n e", "dobbie", "Exordium", "hamm", "im kaos", "jim", "Judge Fudge", "kupomog", "Nicky", "Matty", "Maurice Rodriguez (Not Egg)", "moose", "Nilbog", "paddlin", "parklife", "rem", "RobynS", "Ryan", "Sam", "Shaunbadia", "limp biscuit", "SVT", "Telso", "scully apologist", "tormented", "Torrens", "Tromboon"]
         self.banklist = ["tormented","kat","kaos","peyrin","ry","painty-can","Goat Batman","SVT","scully apologist","Telso","BMC","Hops","TheSpruceMoose","kupomog","beans","Egg","Godot","Negative Ned","justin","Tromboon","Cleve Boy","Smiling Politely","Nilbog","handsomedevil","Torrens","hamm","RobynS","Judge Fudge"]
         self.poll_sessions = []
 
