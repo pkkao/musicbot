@@ -459,7 +459,7 @@ class Mod:
         await self.bot.say("User has been unmuted in this server.")
 
     @commands.group(pass_context=True)
-    @checks.mod_or_permissions(manage_messages=True)
+    @checks.serverowner()
     async def cleanup(self, ctx):
         """Deletes messages."""
         if ctx.invoked_subcommand is None:
@@ -1391,6 +1391,26 @@ class Mod:
                     await self.bot.replace_roles(user, *[discord.utils.get(server.roles, name=color), discord.utils.get(server.roles, id='286985243855028227')])
         except AttributeError:
             await self.bot.say("Not a valid color.")
+
+    @commands.command(no_pm=True, pass_context=True)
+    async def pin(self, ctx, pinned : str):
+        channel = ctx.message.channel
+        if pinned.isdigit():
+            pinmsg = await self.bot.get_message(channel, pinned)
+            await self.bot.pin_message(pinmsg)
+            await self.bot.say("Done.")
+        else:
+            await self.bot.say("Invalid ID.")
+
+    @commands.command(no_pm=True, pass_context=True)
+    async def unpin(self, ctx, pinned : str):
+        channel = ctx.message.channel
+        if pinned.isdigit():
+            pinmsg = await self.bot.get_message(channel, pinned)
+            await self.bot.unpin_message(pinmsg)
+            await self.bot.say("Done.")
+        else:
+            await self.bot.say("Invalid ID.")
 
 def check_folders():
     folders = ("data", "data/mod/")
