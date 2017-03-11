@@ -181,7 +181,9 @@ class General:
 
         Up to 10 intensity levels."""
         name = user.name
-        if intensity <= 0:
+        if intensity <= -3:
+            msg = "*" + name + "* (っ˘̩╭╮˘̩)っ"
+        elif intensity <= 0:
             msg = "(っ˘̩╭╮˘̩)っ *" + name + "*"
         elif intensity <= 3:
             msg = "(っ´▽｀)っ *" + name + "*"
