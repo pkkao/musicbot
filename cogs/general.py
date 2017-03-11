@@ -119,7 +119,7 @@ class General:
         """
         await self.bot.say(randchoice(self.ball))
 
-    @commands.command()
+    @commands.command(aliases=["whodunnit"])
     async def whodunit(self):
         """Who did it??????????????????
         """
