@@ -258,23 +258,23 @@ class Mod:
 
     @commands.command(no_pm=True, pass_context=True)
     @checks.admin_or_permissions(ban_members=True)
-    async def unban(self, ctx, user: discord.Member):
+    async def unban(self, ctx, user: str):
         """Unbans user"""
         author = ctx.message.author
         server = author.server
         try:
-            self._tmp_banned_cache.append(user)
-            await self.bot.unban(server, user)
+            banlist = await self.bot.get_bans(server)
+            member = discord.utils.get(banlist, name=user)
+            await self.bot.unban(server, member)
             logger.info("{}({}) freed {}({})".format(
-                author.name, author.id, user.name, user.id))
+                author.name, author.id, member.name, member.id))
             await self.bot.say("Freed.")
+        except AttributeError:
+            await self.bot.say("No such user.")
         except discord.errors.Forbidden:
             await self.bot.say("I'm not allowed to do that.")
         except Exception as e:
             print(e)
-        finally:
-            await asyncio.sleep(1)
-            self._tmp_banned_cache.remove(user)
 
     #@commands.command(no_pm=True, pass_context=True)
     #@checks.admin_or_permissions(ban_members=True)
