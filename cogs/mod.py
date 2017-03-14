@@ -228,77 +228,96 @@ class Mod:
         except Exception as e:
             print(e)
 
-    #@commands.command(no_pm=True, pass_context=True)
-    #@checks.admin_or_permissions(ban_members=True)
-    #async def ban(self, ctx, user: discord.Member, days: int=0):
-        #"""Bans user and deletes last X days worth of messages.
-
-        #Minimum 0 days, maximum 7. Defaults to 0."""
-        #author = ctx.message.author
-        #server = author.server
-        #if days < 0 or days > 7:
-            #await self.bot.say("Invalid days. Must be between 0 and 7.")
-            #return
-        #try:
-            #self._tmp_banned_cache.append(user)
-            #await self.bot.ban(user, days)
-            #logger.info("{}({}) banned {}({}), deleting {} days worth of messages".format(
-                #author.name, author.id, user.name, user.id, str(days)))
-            #await self.new_case(server,
-                                #action="Ban \N{HAMMER}",
-                                #mod=author,
-                                #user=user)
-            #await self.bot.say("Done. It was about time.")
-        #except discord.errors.Forbidden:
-            #await self.bot.say("I'm not allowed to do that.")
-        #except Exception as e:
-            #print(e)
-        #finally:
-            #await asyncio.sleep(1)
-            #self._tmp_banned_cache.remove(user)
+    @commands.command(no_pm=True, pass_context=True)
+    @checks.admin_or_permissions(ban_members=True)
+    async def ban(self, ctx, user: discord.Member):
+        """Bans user"""
+        author = ctx.message.author
+        server = author.server
+        offline = str(user.status)
+        if offline == "offline":
+            await self.bot.say("meh")
+            return
+        try:
+            self._tmp_banned_cache.append(user)
+            await self.bot.ban(user, 0)
+            logger.info("{}({}) banned {}({})".format(
+                author.name, author.id, user.name, user.id))
+            await self.new_case(server,
+                                action="Ban \N{HAMMER}",
+                                mod=author,
+                                user=user)
+            await self.bot.say("Done. It was about time.")
+        except discord.errors.Forbidden:
+            await self.bot.say("I'm not allowed to do that.")
+        except Exception as e:
+            print(e)
+        finally:
+            await asyncio.sleep(1)
+            self._tmp_banned_cache.remove(user)
 
     @commands.command(no_pm=True, pass_context=True)
     @checks.admin_or_permissions(ban_members=True)
-    async def softban(self, ctx, user: discord.Member):
-        """Kicks the user, deleting 1 day worth of messages."""
-        server = ctx.message.server
-        channel = ctx.message.channel
-        can_ban = channel.permissions_for(server.me).ban_members
+    async def unban(self, ctx, user: discord.Member):
+        """Unbans user"""
         author = ctx.message.author
+        server = author.server
         try:
-            invite = await self.bot.create_invite(server, max_age=3600*24)
-            invite = "\nInvite: " + invite
-        except:
-            invite = ""
-        if can_ban:
-            try:
-                try:  # We don't want blocked DMs preventing us from banning
-                    msg = await self.bot.send_message(user, "You have been banned and "
-                              "then unbanned as a quick way to delete your messages.\n"
-                              "You can now join the server again.{}".format(invite))
-                except:
-                    pass
-                self._tmp_banned_cache.append(user)
-                await self.bot.ban(user, 1)
-                logger.info("{}({}) softbanned {}({}), deleting 1 day worth "
-                    "of messages".format(author.name, author.id, user.name,
-                     user.id))
-                await self.new_case(server,
-                                    action="Softban \N{DASH SYMBOL} \N{HAMMER}",
-                                    mod=author,
-                                    user=user)
-                await self.bot.unban(server, user)
-                await self.bot.say("Done. Enough chaos.")
-            except discord.errors.Forbidden:
-                await self.bot.say("My role is not high enough to softban that user.")
-                await self.bot.delete_message(msg)
-            except Exception as e:
-                print(e)
-            finally:
-                await asyncio.sleep(1)
-                self._tmp_banned_cache.remove(user)
-        else:
+            self._tmp_banned_cache.append(user)
+            await self.bot.unban(server, user)
+            logger.info("{}({}) freed {}({})".format(
+                author.name, author.id, user.name, user.id))
+            await self.bot.say("Freed.")
+        except discord.errors.Forbidden:
             await self.bot.say("I'm not allowed to do that.")
+        except Exception as e:
+            print(e)
+        finally:
+            await asyncio.sleep(1)
+            self._tmp_banned_cache.remove(user)
+
+    #@commands.command(no_pm=True, pass_context=True)
+    #@checks.admin_or_permissions(ban_members=True)
+    #async def softban(self, ctx, user: discord.Member):
+        #"""Kicks the user, deleting 1 day worth of messages."""
+        #server = ctx.message.server
+        #channel = ctx.message.channel
+        #can_ban = channel.permissions_for(server.me).ban_members
+        #author = ctx.message.author
+        #try:
+            #invite = await self.bot.create_invite(server, max_age=3600*24)
+            #invite = "\nInvite: " + invite
+        #except:
+            #invite = ""
+        #if can_ban:
+            #try:
+                #try:  # We don't want blocked DMs preventing us from banning
+                    #msg = await self.bot.send_message(user, "You have been banned and "
+                              #"then unbanned as a quick way to delete your messages.\n"
+                              #"You can now join the server again.{}".format(invite))
+                #except:
+                    #pass
+                #self._tmp_banned_cache.append(user)
+                #await self.bot.ban(user, 1)
+                #logger.info("{}({}) softbanned {}({}), deleting 1 day worth "
+                    #"of messages".format(author.name, author.id, user.name,
+                    #user.id))
+                #await self.new_case(server,
+                                    #action="Softban \N{DASH SYMBOL} \N{HAMMER}",
+                                    #mod=author,
+                                    #user=user)
+                #await self.bot.unban(server, user)
+                #await self.bot.say("Done. Enough chaos.")
+            #except discord.errors.Forbidden:
+                #await self.bot.say("My role is not high enough to softban that user.")
+                #await self.bot.delete_message(msg)
+            #except Exception as e:
+                #print(e)
+            #finally:
+                #await asyncio.sleep(1)
+                #self._tmp_banned_cache.remove(user)
+        #else:
+            #await self.bot.say("I'm not allowed to do that.")
 
     @commands.command(no_pm=True, pass_context=True)
     @checks.admin_or_permissions(manage_nicknames=True)
