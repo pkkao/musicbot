@@ -1419,43 +1419,43 @@ class Mod:
         except AttributeError:
             await self.bot.say("Not a valid color.")
 
-    @commands.command(no_pm=True, pass_context=True)
-    async def pin(self, ctx, pinned : str):
-        channel = ctx.message.channel
-        server = ctx.message.server
-        if pinned.isdigit():
-            try:
-                pinmsg = await self.bot.get_message(channel, pinned)
-                await self.bot.pin_message(pinmsg)
-                await self.bot.say("Done.")
-            except:
-                await self.bot.say("Invalid ID. Turn on developer mode? (user settings --> appearance)")
-        else:
-            try:
-                pinmsg = discord.utils.get(self.bot.messages, content = pinned)
-                await self.bot.pin_message(pinmsg)
-                await self.bot.say("Done.")
-            except:
-                await self.bot.say("Invalid message.")
+    #@commands.command(no_pm=True, pass_context=True)
+    #async def pin(self, ctx, pinned : str):
+        #channel = ctx.message.channel
+        #server = ctx.message.server
+        #if pinned.isdigit():
+            #try:
+                #pinmsg = await self.bot.get_message(channel, pinned)
+                #await self.bot.pin_message(pinmsg)
+                #await self.bot.say("Done.")
+            #except:
+                #await self.bot.say("Invalid ID. Turn on developer mode? (user settings --> appearance)")
+        #else:
+            #try:
+                #pinmsg = discord.utils.get(self.bot.messages, content = pinned)
+                #await self.bot.pin_message(pinmsg)
+                #await self.bot.say("Done.")
+            #except:
+                #await self.bot.say("Invalid message.")
 
-    @commands.command(no_pm=True, pass_context=True)
-    async def unpin(self, ctx, pinned : str):
-        channel = ctx.message.channel
-        server = ctx.message.server
-        if pinned.isdigit():
-            try:
-                pinmsg = await self.bot.get_message(channel, pinned)
-                await self.bot.unpin_message(pinmsg)
-                await self.bot.say("Done.")
-            except:
-                await self.bot.say("Invalid ID. Turn on developer mode? (user settings --> appearance)")
-        else:
-            try:
-                pinmsg = discord.utils.get(self.bot.messages, content = pinned)
-                await self.bot.unpin_message(pinmsg)
-                await self.bot.say("Done.")
-            except:
-                await self.bot.say("Invalid message.")
+    #@commands.command(no_pm=True, pass_context=True)
+    #async def unpin(self, ctx, pinned : str):
+        #channel = ctx.message.channel
+        #server = ctx.message.server
+        #if pinned.isdigit():
+            #try:
+                #pinmsg = await self.bot.get_message(channel, pinned)
+                #await self.bot.unpin_message(pinmsg)
+                #await self.bot.say("Done.")
+            #except:
+                #await self.bot.say("Invalid ID. Turn on developer mode? (user settings --> appearance)")
+        #else:
+            #try:
+                #pinmsg = discord.utils.get(self.bot.messages, content = pinned)
+                #await self.bot.unpin_message(pinmsg)
+                #await self.bot.say("Done.")
+            #except:
+                #await self.bot.say("Invalid message.")
 
 def check_folders():
     folders = ("data", "data/mod/")
