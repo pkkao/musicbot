@@ -276,6 +276,14 @@ class Mod:
         except Exception as e:
             print(e)
 
+    @commands.command(no_pm=True, pass_context=True)
+    async def banlist(self, ctx):
+        """Displays list of banned users"""
+        server = ctx.message.server
+        bans = await self.bot.get_bans(server)
+        message = ', '.join(e.name for e in bans)
+        await self.bot.say(message)
+
     #@commands.command(no_pm=True, pass_context=True)
     #@checks.admin_or_permissions(ban_members=True)
     #async def softban(self, ctx, user: discord.Member):
