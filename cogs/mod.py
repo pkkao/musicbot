@@ -189,7 +189,7 @@ class Mod:
         author = ctx.message.author
         server = author.server
         offline = str(user.status)
-        if user.id == "175547101785096192":
+        if user.id == "175547101785096192" or user.id == "254611746789130240" or user.id == "239631372195463168":
             await self.bot.kick(user)
             logger.info("{}({}) kicked {}({})".format(
                 author.name, author.id, user.name, user.id))
