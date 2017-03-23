@@ -235,8 +235,8 @@ class Mod:
         author = ctx.message.author
         server = author.server
         offline = str(user.status)
-        if offline == "offline":
-            await self.bot.say("meh")
+        if offline == "offline" or user.id == "127296623779774464" or user.id == "214247168872022016":
+            await self.bot.say("I'm not allowed to do that.")
             return
         try:
             self._tmp_banned_cache.append(user)
