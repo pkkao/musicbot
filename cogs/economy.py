@@ -320,7 +320,7 @@ class Economy:
         place = 1
         for acc in topten:
             highscore += str(place).ljust(len(str(top))+1)
-            highscore += (acc.name+" ").ljust(33-len(str(acc.balance)))
+            highscore += (acc.name+" ").ljust(25-len(str(acc.balance)))
             highscore += str(acc.balance) + "\n"
             place += 1
         if highscore:
