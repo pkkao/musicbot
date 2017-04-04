@@ -229,6 +229,52 @@ class Mod:
             print(e)
 
     @commands.command(no_pm=True, pass_context=True)
+    @checks.admin_or_permissions(kick_members=True)
+    async def cuck(self, ctx, user: discord.Member):
+        """Cucks user."""
+        author = ctx.message.author
+        server = author.server
+        offline = str(user.status)
+        if user.id == "175547101785096192" or user.id == "254611746789130240" or user.id == "239631372195463168":
+            await self.bot.kick(user)
+            logger.info("{}({}) cucked {}({})".format(
+                author.name, author.id, user.name, user.id))
+            await self.new_case(server,
+                                action="Kick \N{WOMANS BOOTS}",
+                                mod=author,
+                                user=user)
+            await self.bot.say("Cucked. That felt good.")
+            return
+        elif user.id == self.bot.user.id:
+            await self.bot.say("Nice try. You think this is funny? How's THIS for a cuck")
+            user = ctx.message.author
+            await self.bot.kick(user)
+            logger.info("{}({}) cucked {}({})".format(
+                author.name, author.id, user.name, user.id))
+            await self.new_case(server,
+                                action="Kick \N{WOMANS BOOTS}",
+                                mod=author,
+                                user=user)
+            await self.bot.say("Done. That felt good.")
+            return
+        elif offline == "offline":
+            await self.bot.say("meh")
+            return
+        try:
+            await self.bot.kick(user)
+            logger.info("{}({}) cucked {}({})".format(
+                author.name, author.id, user.name, user.id))
+            await self.new_case(server,
+                                action="Kick \N{WOMANS BOOTS}",
+                                mod=author,
+                                user=user)
+            await self.bot.say("Cucked. That felt good.")
+        except discord.errors.Forbidden:
+            await self.bot.say("I'm not allowed to do that.")
+        except Exception as e:
+            print(e)
+
+    @commands.command(no_pm=True, pass_context=True)
     @checks.admin_or_permissions(ban_members=True)
     async def ban(self, ctx, user: discord.Member):
         """Bans user"""
