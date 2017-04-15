@@ -211,9 +211,9 @@ class Mod:
                                 user=user)
             await self.bot.say("Done. That felt good.")
             return
-        elif offline == "offline":
-            await self.bot.say("meh")
-            return
+        #elif offline == "offline":
+            #await self.bot.say("meh")
+            #return
         try:
             await self.bot.kick(user)
             logger.info("{}({}) kicked {}({})".format(
@@ -257,9 +257,9 @@ class Mod:
                                 user=user)
             await self.bot.say("Done. That felt good.")
             return
-        elif offline == "offline":
-            await self.bot.say("meh")
-            return
+        #elif offline == "offline":
+            #await self.bot.say("meh")
+            #return
         try:
             await self.bot.kick(user)
             logger.info("{}({}) cucked {}({})".format(
@@ -281,9 +281,9 @@ class Mod:
         author = ctx.message.author
         server = author.server
         offline = str(user.status)
-        if offline == "offline" or user.id == "127296623779774464" or user.id == "214247168872022016":
-            await self.bot.say("I'm not allowed to do that.")
-            return
+        #if offline == "offline" or user.id == "127296623779774464" or user.id == "214247168872022016":
+            #await self.bot.say("I'm not allowed to do that.")
+            #return
         try:
             self._tmp_banned_cache.append(user)
             await self.bot.ban(user, 0)
