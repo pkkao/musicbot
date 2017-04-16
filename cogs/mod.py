@@ -302,7 +302,7 @@ class Mod:
             await asyncio.sleep(1)
             self._tmp_banned_cache.remove(user)
 
-    @commands.command(no_pm=True, pass_context=True)
+    @commands.command(aliases=["free"s], no_pm=True, pass_context=True)
     @checks.admin_or_permissions(ban_members=True)
     async def unban(self, ctx, user: str):
         """Unbans user"""
