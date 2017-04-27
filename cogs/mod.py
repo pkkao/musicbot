@@ -189,7 +189,7 @@ class Mod:
         author = ctx.message.author
         server = author.server
         offline = str(user.status)
-        if user.id == "175547101785096192" or user.id == "254611746789130240" or user.id == "239631372195463168":
+        if user.id == "175547101785096192":
             await self.bot.kick(user)
             logger.info("{}({}) kicked {}({})".format(
                 author.name, author.id, user.name, user.id))
@@ -197,7 +197,7 @@ class Mod:
                                 action="Kick \N{WOMANS BOOTS}",
                                 mod=author,
                                 user=user)
-            await self.bot.say("Done. That felt good.")
+            await self.bot.say("What, you egg? \n*[He stabs him.]*")
             return
         elif user.id == self.bot.user.id:
             await self.bot.say("Nice try. You think this is funny? How's THIS for a kick")
