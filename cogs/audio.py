@@ -5,10 +5,7 @@ import os
 from random import shuffle, choice
 from cogs.utils.dataIO import dataIO
 from cogs.utils import checks
-from cogs.utils.chat_formatting import pagify
-from urllib.parse import urlparse
 from __main__ import send_cmd_help, settings
-from json import JSONDecodeError
 import re
 import logging
 import collections
@@ -83,10 +80,6 @@ class UnauthorizedSpeak(Exception):
     pass
 
 
-class ChannelUserLimit(Exception):
-    pass
-
-
 class UnauthorizedSave(Exception):
     pass
 
@@ -135,12 +128,9 @@ class Song:
 class Playlist:
     def __init__(self, server=None, sid=None, name=None, author=None, url=None,
                  playlist=None, path=None, main_class=None, **kwargs):
-        # when is this used? idk
-        # what is server when it's global? None? idk
         self.server = server
         self._sid = sid
         self.name = name
-        # this is an id......
         self.author = author
         self.url = url
         self.main_class = main_class  # reference to Audio
@@ -161,46 +151,8 @@ class Playlist:
                "link": self.url}
         return ret
 
-    def is_author(self, user):
-        """checks if the user is the author of this playlist
-        Returns True/False"""
-        return user.id == self.author
-
-    def can_edit(self, user):
-        """right now checks if user is mod or higher including server owner
-        global playlists are uneditable atm
-
-        dev notes:
-        should probably be defined elsewhere later or be dynamic"""
-
-        # I don't know how global playlists are handled.
-        # Not sure if the framework is there for them to be editable.
-        # Don't know how they are handled by Playlist
-        # Don't know how they are handled by Audio
-        # so let's make sure it's not global at all.
-        if self.main_class._playlist_exists_global(self.name):
-            return False
-
-        admin_role = settings.get_server_admin(self.server)
-        mod_role = settings.get_server_mod(self.server)
-
-        is_playlist_author = self.is_author(user)
-        is_bot_owner = user.id == settings.owner
-        is_server_owner = self.server.owner.id == self.author
-        is_admin = discord.utils.get(user.roles, name=admin_role) is not None
-        is_mod = discord.utils.get(user.roles, name=mod_role) is not None
-
-        return any((is_playlist_author,
-                    is_bot_owner,
-                    is_server_owner,
-                    is_admin,
-                    is_mod))
-
-
-    # def __del__() ?
-
     def append_song(self, author, url):
-        if not self.can_edit(author):
+        if author.id != self.author:
             raise UnauthorizedSave
         elif not self.main_class._valid_playable_url(url):
             raise InvalidURL
@@ -287,14 +239,12 @@ class Audio:
         self.downloaders = {}  # sid: object
         self.settings = dataIO.load_json("data/audio/settings.json")
         self.server_specific_setting_keys = ["VOLUME", "VOTE_ENABLED",
-                                             "VOTE_THRESHOLD", "NOPPL_DISCONNECT"]
+                                             "VOTE_THRESHOLD"]
         self.cache_path = "data/audio/cache"
         self.local_playlist_path = "data/audio/localtracks"
         self._old_game = False
 
         self.skip_votes = {}
-
-        self.connect_timers = {}
 
         if player == "ffmpeg":
             self.settings["AVCONV"] = False
@@ -633,21 +583,13 @@ class Audio:
 
     async def _join_voice_channel(self, channel):
         server = channel.server
-        connect_time = self.connect_timers.get(server.id, 0)
-        if time.time() < connect_time:
-            diff = int(connect_time - time.time())
-            raise ConnectTimeout("You are on connect cooldown for another {}"
-                                 " seconds.".format(diff))
         if server.id in self.queue:
             self.queue[server.id]["VOICE_CHANNEL_ID"] = channel.id
         try:
-            await asyncio.wait_for(self.bot.join_voice_channel(channel),
-                                   timeout=5, loop=self.bot.loop)
+            await self.bot.join_voice_channel(channel)
         except asyncio.futures.TimeoutError as e:
             log.exception(e)
-            self.connect_timers[server.id] = time.time() + 300
-            raise ConnectTimeout("We timed out connecting to a voice channel,"
-                                 " please try again in 10 minutes.")
+            raise ConnectTimeout("We timed out connecting to a voice channel")
 
     def _list_local_playlists(self):
         ret = []
@@ -690,7 +632,6 @@ class Audio:
         kwargs['main_class'] = self
         kwargs['name'] = name
         kwargs['sid'] = server
-        kwargs['server'] = self.bot.get_server(server)
 
         return Playlist(**kwargs)
 
@@ -737,12 +678,6 @@ class Audio:
         yt_link = re.compile(
             r'^(https?\:\/\/)?(www\.|m\.)?(youtube\.com|youtu\.?be)\/.+$')
         if yt_link.match(url):
-            return True
-        return False
-
-    def _match_any_url(self, url):
-        url = urlparse(url)
-        if url.scheme and url.netloc and url.path:
             return True
         return False
 
@@ -1057,24 +992,6 @@ class Audio:
         await self.bot.say("Max cache size set to {} MB.".format(size))
         self.save_settings()
 
-    @audioset.command(name="emptydisconnect", pass_context=True)
-    @checks.mod_or_permissions(manage_messages=True)
-    async def audioset_emptydisconnect(self, ctx):
-        """Toggles auto disconnection when everyone leaves the channel"""
-        server = ctx.message.server
-        settings = self.get_server_settings(server.id)
-        noppl_disconnect = settings.get("NOPPL_DISCONNECT", True)
-        self.set_server_setting(server, "NOPPL_DISCONNECT",
-                                not noppl_disconnect)
-        if not noppl_disconnect:
-            await self.bot.say("If there is no one left in the voice channel"
-                               " the bot will automatically disconnect after"
-                               " five minutes.")
-        else:
-            await self.bot.say("The bot will no longer auto disconnect"
-                               " if the voice channel is empty.")
-        self.save_settings()
-
     @audioset.command(name="maxlength")
     @checks.is_owner()
     async def audioset_maxlength(self, length: int):
@@ -1264,9 +1181,6 @@ class Audio:
                 await self.bot.say("I don't have permissions to speak in your"
                                    " voice channel.")
                 return
-            except ChannelUserLimit:
-                await self.bot.say("Your voice channel is full.")
-                return
             else:
                 await self._join_voice_channel(voice_channel)
         else:  # We are connected but not to the right channel
@@ -1297,11 +1211,14 @@ class Audio:
     @local.command(name="list", no_pm=True)
     async def list_local(self):
         """Lists local playlists"""
-        playlists = ", ".join(self._list_local_playlists())
-        if playlists:
-            playlists = "Available local playlists:\n\n" + playlists
-            for page in pagify(playlists, delims=[" "]):
-                await self.bot.say(page)
+        local_playlists = self._list_local_playlists()
+        if local_playlists:
+            msg = "```xl\n"
+            for p in local_playlists:
+                msg += "{}, ".format(p)
+            msg = msg.strip(", ")
+            msg += "```"
+            await self.bot.say("Available local playlists:\n{}".format(msg))
         else:
             await self.bot.say("There are no playlists.")
 
@@ -1354,9 +1271,6 @@ class Audio:
             await self.bot.say("I don't have permissions to speak in your"
                                " voice channel.")
             return
-        except ChannelUserLimit:
-            await self.bot.say("Your voice channel is full.")
-            return
 
         if not self.voice_connected(server):
             await self._join_voice_channel(voice_channel)
@@ -1372,9 +1286,7 @@ class Audio:
             await self.bot.say("I'm already downloading a file!")
             return
 
-        url = url.strip("<>")
-
-        if self._match_any_url(url):
+        if "." in url:
             if not self._valid_playable_url(url):
                 await self.bot.say("That's not a valid URL.")
                 return
@@ -1508,12 +1420,14 @@ class Audio:
     @playlist.command(pass_context=True, no_pm=True, name="list")
     async def playlist_list(self, ctx):
         """Lists all available playlists"""
-        server = ctx.message.server
-        playlists = ", ".join(self._list_playlists(server))
-        if playlists:
-            playlists = "Available playlists:\n\n" + playlists
-            for page in pagify(playlists, delims=[" "]):
-                await self.bot.say(page)
+        files = self._list_playlists(ctx.message.server)
+        if files:
+            msg = "```xl\n"
+            for f in files:
+                msg += "{}, ".format(f)
+            msg = msg.strip(", ")
+            msg += "```"
+            await self.bot.say("Available playlists:\n{}".format(msg))
         else:
             await self.bot.say("There are no playlists.")
 
@@ -1543,7 +1457,6 @@ class Audio:
     @playlist.command(pass_context=True, no_pm=True, name="remove")
     async def playlist_remove(self, ctx, name):
         """Deletes a saved playlist."""
-        author = ctx.message.author
         server = ctx.message.server
 
         if not self._valid_playlist_name(name):
@@ -1551,20 +1464,11 @@ class Audio:
                                "characters.")
             return
 
-        if not self._playlist_exists(server, name):
+        if self._playlist_exists(server, name):
+            self._delete_playlist(server, name)
+            await self.bot.say("Playlist deleted.")
+        else:
             await self.bot.say("Playlist not found.")
-            return
-
-        playlist = self._load_playlist(
-            server, name, local=self._playlist_exists_local(server, name))
-
-        if not playlist.can_edit(author):
-            await self.bot.say("You do not have permissions to delete that playlist.")
-            return
-
-        self._delete_playlist(server, name)
-        await self.bot.say("Playlist deleted.")
-
 
     @playlist.command(pass_context=True, no_pm=True, name="start")
     async def playlist_start(self, ctx, name):
@@ -1595,9 +1499,6 @@ class Audio:
                 except UnauthorizedSpeak:
                     await self.bot.say("I don't have permissions to speak in"
                                        " your voice channel.")
-                    return
-                except ChannelUserLimit:
-                    await self.bot.say("Your voice channel is full.")
                     return
                 else:
                     await self._join_voice_channel(voice_channel)
@@ -1641,9 +1542,7 @@ class Audio:
                                     " queue to modify. This should never"
                                     " happen.")
 
-        url = url.strip("<>")
-
-        if self._match_any_url(url):
+        if "." in url:
             if not self._valid_playable_url(url):
                 await self.bot.say("That's not a valid URL.")
                 return
@@ -1829,7 +1728,6 @@ class Audio:
         mod_role = settings.get_server_mod(server)
 
         is_owner = member.id == settings.owner
-        is_server_owner = member == server.owner
         is_admin = discord.utils.get(member.roles, name=admin_role) is not None
         is_mod = discord.utils.get(member.roles, name=mod_role) is not None
 
@@ -1837,7 +1735,7 @@ class Audio:
         nonbots = sum(not m.bot for m in member.voice_channel.voice_members)
         alone = nonbots <= 1
 
-        return is_owner or is_server_owner or is_admin or is_mod or alone
+        return is_owner or is_admin or is_mod or alone
 
     @commands.command(pass_context=True, no_pm=True)
     async def sing(self, ctx):
@@ -1951,18 +1849,11 @@ class Audio:
                     stop_times[server] = int(time.time())
 
                 if hasattr(vc, 'audio_player'):
-                    if vc.audio_player.is_done():
+                    if (vc.audio_player.is_done() or len(vc.channel.voice_members) == 1):
                         if server not in stop_times or stop_times[server] is None:
                             log.debug("putting sid {} in stop loop".format(server.id))
                             stop_times[server] = int(time.time())
-
-                    noppl_disconnect = self.get_server_settings(server)
-                    noppl_disconnect = noppl_disconnect.get("NOPPL_DISCONNECT", True)
-                    if noppl_disconnect and len(vc.channel.voice_members) == 1:
-                        if server not in stop_times or stop_times[server] is None:
-                            log.debug("putting sid {} in stop loop".format(server.id))
-                            stop_times[server] = int(time.time())
-                    elif not vc.audio_player.is_done():
+                    elif vc.audio_player.is_playing():
                         stop_times[server] = None
 
             for server in stop_times:
@@ -1985,11 +1876,6 @@ class Audio:
             self.settings["SERVERS"][sid] = {}
         ret = self.settings["SERVERS"][sid]
 
-        # Not the cleanest way. Some refactoring is suggested if more settings
-        # have to be added
-        if "NOPPL_DISCONNECT" not in ret:
-            ret["NOPPL_DISCONNECT"] = True
-
         for setting in self.server_specific_setting_keys:
             if setting not in ret:
                 # Add the default
@@ -2004,22 +1890,12 @@ class Audio:
 
     def has_connect_perm(self, author, server):
         channel = author.voice_channel
-
-        if channel:
-            is_admin = channel.permissions_for(server.me).administrator
-            if channel.user_limit == 0:
-                is_full = False
-            else:
-                is_full = len(channel.voice_members) >= channel.user_limit
-
         if channel is None:
             raise AuthorNotConnected
         elif channel.permissions_for(server.me).connect is False:
             raise UnauthorizedConnect
         elif channel.permissions_for(server.me).speak is False:
             raise UnauthorizedSpeak
-        elif is_full and not is_admin:
-            raise ChannelUserLimit
         else:
             return True
         return False
@@ -2160,10 +2036,6 @@ class Audio:
                 log.debug("just got unmuted, resuming")
                 vc.audio_player.resume()
 
-    def __unload(self):
-        for vc in self.bot.voice_clients:
-            self.bot.loop.create_task(vc.disconnect())
-
 
 def check_folders():
     folders = ("data/audio", "data/audio/cache", "data/audio/playlists",
@@ -2185,13 +2057,7 @@ def check_files():
         print("Creating default audio settings.json...")
         dataIO.save_json(settings_path, default)
     else:  # consistency check
-        try:
-            current = dataIO.load_json(settings_path)
-        except JSONDecodeError:
-            # settings.json keeps getting corrupted for unknown reasons. Let's
-            # try to keep it from making the cog load fail.
-            dataIO.save_json(settings_path, default)
-            current = dataIO.load_json(settings_path)
+        current = dataIO.load_json(settings_path)
         if current.keys() != default.keys():
             for key in default.keys():
                 if key not in current.keys():
