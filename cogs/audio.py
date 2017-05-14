@@ -21,6 +21,8 @@ __version__ = "0.1.1"
 
 log = logging.getLogger("red.audio")
 
+logger = logging.getLogger("audio")
+
 try:
     import youtube_dl
 except:
@@ -908,9 +910,8 @@ class Audio:
 
     def _setup_queue(self, server):
         self.queue[server.id] = {"REPEAT": False, "PLAYLIST": False,
-                                 "VOICE_CHANNEL_ID": None,
-                                 "QUEUE": deque(), "TEMP_QUEUE": deque(),
-                                 "NOW_PLAYING": None}
+        "VOICE_CHANNEL_ID": None,"QUEUE": deque(),
+        "TEMP_QUEUE": deque(),"NOW_PLAYING": None}
 
     def _stop(self, server):
         self._setup_queue(server)
@@ -1245,8 +1246,8 @@ class Audio:
     async def play(self, ctx, *, url_or_search_terms):
         """Plays a link / searches and play"""
         url = url_or_search_terms
-        server = ctx.message.server
         author = ctx.message.author
+        server = ctx.message.server
         voice_channel = author.voice_channel
 
         # Checking if playing in current server
@@ -1297,9 +1298,12 @@ class Audio:
         if "[SEARCH:]" not in url and "youtube" in url:
             url = url.split("&")[0]  # Temp fix for the &list issue
 
+        logger.info("{} played {}".format(author.name, url))
+        
         self._stop_player(server)
         self._clear_queue(server)
         self._add_to_queue(server, url)
+
 
     @commands.command(pass_context=True, no_pm=True)
     async def prev(self, ctx):
@@ -1451,7 +1455,6 @@ class Audio:
 
         # We have a queue to modify
         self._add_to_queue(server, url)
-
         await self.bot.say("Queued.")
 
     @playlist.command(pass_context=True, no_pm=True, name="remove")
@@ -1527,9 +1530,11 @@ class Audio:
             added to the song loop (if running). If you use `queue` when a
             playlist is running, it will temporarily be played next and will
             NOT stay in the playlist loop."""
+        
         if url is None:
             return await self._queue_list(ctx)
         server = ctx.message.server
+        author = ctx.message.author
         if not self.voice_connected(server):
             await ctx.invoke(self.play, url_or_search_terms=url)
             return
@@ -1561,6 +1566,7 @@ class Audio:
             log.debug("queueing to the actual queue for sid {}".format(
                 server.id))
             self._add_to_queue(server, url)
+        logger.info("{} played {}".format(author.name, url))
         await self.bot.say("Queued.")
 
     async def _queue_list(self, ctx):
@@ -1580,10 +1586,8 @@ class Audio:
         if now_playing is not None:
             msg += "\n***Now playing:***\n{}\n".format(now_playing.title)
 
-        queue_url_list = self._get_queue(server, 5)
-        tempqueue_url_list = self._get_queue_tempqueue(server, 5)
-
-        await self.bot.say("Gathering information...")
+        queue_url_list = self._get_queue(server, 10)
+        tempqueue_url_list = self._get_queue_tempqueue(server, 10)
 
         queue_song_list = await self._download_all(queue_url_list)
         tempqueue_song_list = await self._download_all(tempqueue_url_list)
@@ -1596,7 +1600,7 @@ class Audio:
                 song_info.append("{}. {.webpage_url}".format(num, song))
 
         for num, song in enumerate(queue_song_list, len(song_info) + 1):
-            if num > 5:
+            if num > 10:
                 break
             try:
                 song_info.append("{}. {.title}".format(num, song))
@@ -1697,8 +1701,8 @@ class Audio:
 
                     num_votes = len(self.skip_votes[server.id])
                     # Exclude bots and non-plebs
-                    num_members = sum(not (m.bot or self.can_instaskip(m))
-                                      for m in vchan.voice_members)
+                    num_members = sum(not (m.bot) 
+                                     for m in vchan.voice_members)
                     vote = int(100 * num_votes / num_members)
                     thresh = self.get_server_settings(server)["VOTE_THRESHOLD"]
 
@@ -1735,7 +1739,7 @@ class Audio:
         nonbots = sum(not m.bot for m in member.voice_channel.voice_members)
         alone = nonbots <= 1
 
-        return is_owner or is_admin or is_mod or alone
+        return is_owner or is_admin or alone
 
     @commands.command(pass_context=True, no_pm=True)
     async def sing(self, ctx):
@@ -1770,10 +1774,8 @@ class Audio:
                     dur = "{0}:{1:0>2}".format(m, s)
             else:
                 dur = None
-            msg = ("\n**Title:** {}\n**Author:** {}\n**Uploader:** {}\n"
-                   "**Views:** {}\n**Duration:** {}\n\n<{}>".format(
-                       song.title, song.creator, song.uploader,
-                       song.view_count, dur, song.webpage_url))
+            msg = ("\n**Title:** {}\n**Author:** {}\n**Duration:** {}\n\n<{}>".format(
+                       song.title, song.creator, dur, song.webpage_url))
             await self.bot.say(msg.replace("**Author:** None\n", "")
                                   .replace("**Views:** None\n", "")
                                   .replace("**Uploader:** None\n", "")
@@ -2084,6 +2086,15 @@ def verify_ffmpeg_avconv():
 def setup(bot):
     check_folders()
     check_files()
+    logger = logging.getLogger("audio")
+    # Prevents the logger from being loaded again in case of module reload
+    if logger.level == 0:
+        logger.setLevel(logging.INFO)
+        handler = logging.FileHandler(
+            filename='data/audio/audio.log', encoding='utf-8', mode='a')
+        handler.setFormatter(
+            logging.Formatter('%(asctime)s %(message)s', datefmt="[%m/%d/%Y %I:%M %p]"))
+        logger.addHandler(handler)
 
     if youtube_dl is None:
         raise RuntimeError("You need to run `pip3 install youtube_dl`")
