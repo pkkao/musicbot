@@ -1,0 +1,19 @@
+{
+    "254043153080778752" : {
+        "ADMIN_ROLE" : "mods",
+        "MOD_ROLE" : "mods",
+        "PREFIXES" : []
+    },
+    "EMAIL" : null,
+    "OWNER" : "122243205524750336",
+    "PASSWORD" : null,
+    "PREFIXES" : [
+        "!"
+    ],
+    "TOKEN" : "MjU0MzY2OTQwNTg2MzExNjgw.CzNUOg.nyfL3hL71GAO7Yv20rynMzEgCek",
+    "default" : {
+        "ADMIN_ROLE" : "Transistor",
+        "MOD_ROLE" : "Process",
+        "PREFIXES" : []
+    }
+}
